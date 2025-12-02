@@ -24,6 +24,9 @@ CTFrontendBuilder.controller("ComponentsStates", function($scope, $parentScope) 
             return false;
         }
 
+        // trigger watch to update CM content
+        $scope.updateCM = !$scope.updateCM;
+
         if ( id == undefined ) {
             id = $scope.component.active.id;
         }

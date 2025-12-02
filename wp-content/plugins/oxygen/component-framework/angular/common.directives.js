@@ -713,8 +713,9 @@ CTCommonDirectives.directive("ctevalconditions", function() {
         link: function(scope, element, attrs) {
             
             setTimeout(function() {
-                var id = parseInt(element.attr('ng-attr-component-id'));
-                scope.parentScope.evalGlobalConditions(id);
+                var id = parseInt(element.attr('ng-attr-component-id')),
+                    name = element.attr('ng-attr-component-name')
+                scope.parentScope.evalGlobalConditions(id, name);
             }, 0);
         }
     }
@@ -1060,4 +1061,68 @@ CTCommonDirectives.directive('oxyRangeFix', function() {
             },
         }
     };
+});
+
+CTCommonDirectives.directive('oxyRightClick',function(){
+    return function(scope,el,attrs){
+        el.bind('contextmenu',function(e){
+            e.preventDefault();
+            e.stopPropagation();
+
+            var menu = null,
+                offset_left = 0,
+                offset_top = 0;
+
+            // toolbar
+            if ( angular.element(e.currentTarget).closest('#ct-controller-ui').length ){
+                
+                if (scope.$parent.iframeScope.getOption('not-registered', attrs.componentId)) {
+                    return false;
+                }
+
+                offset = document.getElementById('ct-controller-ui').getBoundingClientRect()
+                menu = angular.element("#oxygen-context-menu")
+                offset_left = e.clientX
+                offset_top  = e.clientY
+
+                if ( menu.height() + offset_top > offset.bottom ) {
+                    offset_top = offset.bottom - menu.height();
+                }
+
+                menu.css({
+                    left: offset_left,
+                    top: offset_top,
+                })
+
+                scope.contextMenu.show = true;
+                scope.contextMenu.id = attrs.componentId;
+            }
+            // design
+            else {
+
+                if (scope.$parent.getOption('not-registered', attrs.componentId)) {
+                    return false;
+                }
+
+                var offset = parent.document.getElementById('ct-artificial-viewport').getBoundingClientRect(),
+                    viewportScale = scope.$parent.parentScope.viewportScale
+                menu = angular.element("#oxygen-context-menu", window.parent.document)
+                offset_left = (e.clientX * viewportScale) + offset.left
+                offset_top  = (e.clientY * viewportScale) + offset.top
+
+                if ( menu.height() + offset_top > offset.bottom ) {
+                    offset_top = offset.bottom - menu.height();
+                }
+
+                menu.css({
+                    left: offset_left,
+                    top: offset_top,
+                })
+
+                scope.$parent.parentScope.contextMenu.show = true;
+                scope.$parent.parentScope.contextMenu.id = attrs.componentId;
+            }
+            
+        }) ;
+    }
 });

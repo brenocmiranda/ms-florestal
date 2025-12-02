@@ -12,7 +12,7 @@ class Oxy_VSB_Advanced_Query {
     }
 
     static function process_adv_query_args($children) {
-            
+
         $args = array();
 
         $booleans = array(
@@ -38,12 +38,84 @@ class Oxy_VSB_Advanced_Query {
             $key = isset($child['key']) && !empty($child['key']) ? $child['key'] : null;
 
             if(isset($child['values']) && is_array($child['values']) && sizeof($child['values']) > 0) {
-                $result = self::process_adv_query_args($child['values']);
 
-                if(strpos($key, '__') === false && is_array($result) && sizeof($result) === 1) {
-                    foreach($result as $k => $value) {
-                        if(is_numeric($k) && !intval($k)) {
-                            $result = $value;
+                // process Custom Query
+                if ($key === "custom_query") {
+                    foreach ($child['values'] as $param) {
+                        if ( isset( $param['values']) && is_array($param['values']) && sizeof($param['values']) > 0 ) {
+                            $key_value = array( "key" => "", "value" => "" );
+                            foreach ( $param['values'] as $param) {
+                                if ($param['key'] == 'key') {
+                                    $key_value['key'] = $param['value'];
+                                }
+                                if ($param['key'] == 'array_value') {
+                                    $key_value['value'] = self::process_adv_query_args($param['values']);
+                                }
+                                if ($param['key'] == 'single_value' ) {
+                                    $key_value['value'] = $param['value'];
+                                }
+                            }
+                        }
+                        $result[$key_value['key']] = $key_value['value'];
+                        $exploded = true;
+                    }
+                }
+                else
+                if ($key === "meta_query") {
+                    foreach ($child['values'] as $values) {
+                        $key_value = array( "key" => "", "value" => "" );
+                        foreach ( $values['values'] as $param) {
+                            if ($param['key'] == 'query_name') {
+                                $key_value['key'] = $param['value'];
+                            }
+                            $key_value['value'] = self::process_adv_query_args($values['values']);
+                        }
+                        if ($key_value['key']) {
+                            $result[$key_value['key']] = $key_value['value'];
+                        }
+                        else if ($values['key'] == 'relation') {
+                            $result[$values['key']] = $values['value'];
+                        }
+                        else {
+                            $result[] = $key_value['value'];
+                        }
+                    }
+                }
+                else 
+                if ($key === 'orderby') {
+                    foreach ($child['values'] as $values) {
+                        $key_value = array( "key" => "", "value" => "" );
+                        if (isset($values['values']) && is_array($values['values'])) {
+                            foreach ( $values['values'] as $param) {
+                                if ($param['key'] == 'key') {
+                                    $key_value['key'] = $param['value'];
+                                }
+                                if ($param['key'] == 'value') {
+                                    $key_value['value'] = $param['value'];
+                                }
+                            }
+                        }
+                        if (!isset($values['values']) || !$values['values']) {
+                            $key_value['key'] = $values['key'] ?? "";
+                            $key_value['value'] = $values['value'] ?? "";
+                        }
+                        if (!$key_value['key']) {
+                            // fallback for old 'ordreby'
+                            $result = $key_value['value'];
+                        }
+                        else {
+                            $result[$key_value['key']] = $key_value['value'];
+                        }
+                    }
+                }
+                else {       
+                    $result = self::process_adv_query_args($child['values']);
+                    
+                    if(strpos($key, '__') === false && is_array($result) && sizeof($result) === 1) {
+                        foreach($result as $k => $value) {
+                            if(is_numeric($k) && !intval($k)) {
+                                $result = $value;
+                            }
                         }
                     }
                 }
@@ -69,7 +141,11 @@ class Oxy_VSB_Advanced_Query {
                   $args[] = array($result);
               }
               else if($key) {
-                  $args[$key] = $result;
+                // exclude helper params from actual query
+                $helpers = ["query_name"];
+                if (!in_array($key, $helpers)) {
+                    $args[$key] = $result;
+                }
               } else {
                   $args[] = $result;
               }
@@ -81,6 +157,7 @@ class Oxy_VSB_Advanced_Query {
 
 	static function query_args($params) {
 
+        global $wp_query;
 	
         $args = self::process_adv_query_args($params);
 
@@ -88,11 +165,17 @@ class Oxy_VSB_Advanced_Query {
         if (get_query_var('paged') && (!isset($args['nopaging']) || !$args['nopaging'])) {
             $args['paged'] = get_query_var( 'paged' );
         }
-        
-        // fail safe, for esssential params
+    
+        // use post_type from current query if any defined
         if(!isset($args['post_type'])) {
+            $args['post_type'] = $wp_query->query_vars['post_type'] ?? 'post';
+        }
+
+        // fallback to any post type if it is still empty
+        if(!$args['post_type']) {
             $args['post_type'] = 'any';
         }
+
 
         return $args;
 	}
@@ -135,6 +218,7 @@ class Oxy_VSB_Advanced_Query {
 
       )
     ?>
+
     <div
       ng-init="
       preset_query_params = [
@@ -370,6 +454,19 @@ class Oxy_VSB_Advanced_Query {
                           'operator': null
                       }
                   },
+                  orderby: {
+                        'ID':null,
+                        'author':null,
+                        'title':null,
+                        'name':null,
+                        'type':null,
+                        'date':null,
+                        'rand':null,
+                        'array': {
+                                'key':null,
+                                'value':null,
+                            },
+                  },
                   meta_query: {
                       'relation': null,
                       'array': {
@@ -377,10 +474,21 @@ class Oxy_VSB_Advanced_Query {
                           'value': 'array',
                           'type': null,
                           'compare': null,
+                          'query_name': null,
                       }
+                  },
+                  custom_query: {
+                    'param': {
+                          'key': null,
+                          'array_value': 'array',
+                          'single_value': null,
+                    }
                   }
               };
               all_query_params = {
+                  'Custom': [
+                    'custom_query'
+                  ],
                   'Author': [
                       'author',
                       'author__name',
@@ -485,14 +593,14 @@ class Oxy_VSB_Advanced_Query {
         <div class='oxygen-condition-builder-add-condition' 
             ng-if="iframeScope.component.options[iframeScope.component.active.id]['model']['wp_query_advanced'] && iframeScope.component.options[iframeScope.component.active.id]['model']['wp_query_advanced'].length">
             
-            <a ng-click="iframeScope.component.options[iframeScope.component.active.id]['model']['wp_query_advanced'].push({key:null, values:[]}); iframeScope.setOption(iframeScope.component.active.id, '<?php echo $tag; ?>', 'wp_query_advanced')"><?php _e("Add Parameter","oxygen");?></a>
+            <a ng-click="iframeScope.component.options[iframeScope.component.active.id]['model']['wp_query_advanced'].push({key:null, values:[]}); iframeScope.setOption(iframeScope.component.active.id, '<?php echo $tag; ?>', 'wp_query_advanced')"><?php oxygen_translate_echo("Add Parameter","oxygen");?></a>
         </div> 
 
         <div class="oxygen-add-button"
             ng-if="!iframeScope.component.options[iframeScope.component.active.id]['model']['wp_query_advanced'] || !iframeScope.component.options[iframeScope.component.active.id]['model']['wp_query_advanced'].length"
             ng-click="iframeScope.component.options[iframeScope.component.active.id]['model']['wp_query_advanced'].push({key:null, values:[]}); iframeScope.setOption(iframeScope.component.active.id, '<?php echo $tag; ?>', 'wp_query_advanced')">
             
-            <span><?php _e("Add Query Parameter","oxygen");?></span>
+            <span><?php oxygen_translate_echo("Add Query Parameter","oxygen");?></span>
         </div>
 
 		<?php

@@ -11,11 +11,11 @@ add_filter( 'wpml_pb_shortcode_content_for_translation', 'ct_wpml_filter_content
 function ct_wpml_filter_content_for_translation( $content, $post_id ) {
 
 	// skip if has JSON
-	if ( oxygen_json_has_elements(get_post_meta( $post_id, "ct_builder_json", true )) ) {
+	if ( oxygen_json_has_elements(oxy_get_post_meta( $post_id, "ct_builder_json", true )) ) {
 		return $content;
 	}
 
-	$shortcodes = get_post_meta( $post_id, "ct_builder_shortcodes", true );
+	$shortcodes = oxy_get_post_meta( $post_id, "ct_builder_shortcodes", true );
 	if ( $shortcodes ) {
 		$content = $shortcodes;
 	}
@@ -27,11 +27,11 @@ add_filter( 'wpml_pb_shortcodes_save_translation', 'ct_wpml_filter_save_translat
 function ct_wpml_filter_save_translation( $saved, $translated_post_id, $new_content ) {
 	
 	// skip if has JSON
-	if ( oxygen_json_has_elements(get_post_meta( $translated_post_id, "ct_builder_json", true )) ) {
+	if ( oxygen_json_has_elements(oxy_get_post_meta( $translated_post_id, "ct_builder_json", true )) ) {
 		return true;
 	}
 	
-	update_post_meta( $translated_post_id, "ct_builder_shortcodes", $new_content );
+	oxy_update_post_meta( $translated_post_id, "ct_builder_shortcodes", $new_content );
 	return true;
 }
 
@@ -54,7 +54,7 @@ function oxy_wpml_register_strings( $post, $package_data ) {
 
 	if ( 'Oxygen Builder' === $package_data['kind'] ) {
 		// get JSON
-		$json = get_post_meta( $post->ID, "ct_builder_json", true );
+		$json = oxy_get_post_meta( $post->ID, "ct_builder_json", true );
 		$tree = json_decode( $json, true);
 		
 		oxy_wpml_register_strings_recursion($tree, $package_data);
@@ -96,13 +96,13 @@ function oxy_wpml_translated(
 		// Get the data from the original post
 		// We'll then update the data with the translated strings and
 		// save to the translated post.
-		$json = get_post_meta( $original_post->ID, "ct_builder_json", true );
+		$json = oxy_get_post_meta( $original_post->ID, "ct_builder_json", true );
 		$tree = json_decode( $json, true );
 		$tree = oxy_wpml_translated_recursion($tree, $string_translations, $translated_post_id, $lang);
 		$json = json_encode( $tree );
 
 		// Save the post data that now includes the translations to the translated post.
-		update_post_meta( $translated_post_id, "ct_builder_json", $json );
+		oxy_update_post_meta( $translated_post_id, "ct_builder_json", $json );
 	}
 }
 add_action( 'wpml_page_builder_string_translated', 'oxy_wpml_translated', 10, 5 );

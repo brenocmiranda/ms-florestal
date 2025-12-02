@@ -52,6 +52,12 @@ if($options['wp_query'] === 'advanced') {
 
 $response = $oxygen_vsb_components['repeater']->parse_shortcodes_map($models, $options, $parentQuery, $repeaterFields);
 
+// run a query to check for any errors
+$oxygen_vsb_components['repeater']->setQuery($options);
+if ($oxygen_vsb_components['repeater']->queryError) {
+	$response["error"] = $oxygen_vsb_components['repeater']->queryError;
+}
+
 echo json_encode($response);
 
 die();

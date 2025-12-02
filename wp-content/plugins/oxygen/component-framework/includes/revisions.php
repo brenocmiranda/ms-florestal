@@ -8,27 +8,27 @@ class Oxygen_Revisions {
         $inserted_revision = false;
 
         // If the current shortcode three is from a revision, there is no need to create another revision
-        if( metadata_exists( "post", $post_id, "ct_current_revision" ) ) {
-            delete_metadata( 'post', $post_id, "ct_current_revision" );
+        if( metadata_exists( "post", $post_id, "_ct_current_revision" ) ) {
+            delete_metadata( 'post', $post_id, "_ct_current_revision" );
             return $inserted_revision;
         }
 
-        if( metadata_exists( "post", $post_id, "ct_builder_json" ) ){
+        if( metadata_exists( "post", $post_id, "_ct_builder_json" ) ){
             // First copy the current shortcode three as a new revision
-            $current_three = get_post_meta( $post_id, "ct_builder_json", true);
+            $current_three = oxy_get_post_meta( $post_id, "ct_builder_json", true);
 
             // Check to avoid creating an empty revision on the first save
-            $revisions = self::get_post_meta_db( $post_id, "ct_builder_shortcodes_revisions" );
+            $revisions = self::get_post_meta_db( $post_id, "_ct_builder_shortcodes_revisions" );
             if( count( $revisions ) == 0 && empty( trim( $current_three ) ) ) return $inserted_revision;
             
-            $inserted_revision = add_post_meta( $post_id, "ct_builder_shortcodes_revisions", addslashes($current_three) );
-            add_post_meta( $post_id, "ct_builder_shortcodes_revisions_dates", time() );
+            $inserted_revision = add_post_meta( $post_id, "_ct_builder_shortcodes_revisions", addslashes($current_three) );
+            add_post_meta( $post_id, "_ct_builder_shortcodes_revisions_dates", time() );
 
             // Delete the older revisions to only keep:
             // - The $max_recent_revisions most recent versions
             // – Then, $max_daily_revisions versions, one for each day for the preceding month, since the oldest revision
-            $revisions = self::get_post_meta_db( $post_id, "ct_builder_shortcodes_revisions" );
-            $dates = self::get_post_meta_db( $post_id, "ct_builder_shortcodes_revisions_dates" );
+            $revisions = self::get_post_meta_db( $post_id, "_ct_builder_shortcodes_revisions" );
+            $dates = self::get_post_meta_db( $post_id, "_ct_builder_shortcodes_revisions_dates" );
             if( is_array( $revisions ) && count( $revisions ) > $max_recent_revisions ) {
                 $revisions = array_reverse( $revisions );
 	            $dates = array_reverse( $dates );
@@ -37,7 +37,7 @@ class Oxygen_Revisions {
 	            $daily_revisions = 0;
 	            $index =  $max_recent_revisions;
 
-	            for( ; $index <= count( $revisions ); $index++ ){
+	            for( ; $index < count( $revisions ); $index++ ){
 		            if( $daily_revisions >= $max_daily_revisions ) {
 			            $revision_to_delete = $revisions[ $index ]->meta_id;
 			            $date_to_delete = $dates[ $index ]->meta_id;
@@ -68,7 +68,7 @@ class Oxygen_Revisions {
     static function restore_revision( $post_id, $revision_id ) {
         $revision_created = false;
         // First make sure there is a $revision_id that belongs to the $post_id
-        $revisions = self::get_post_meta_db( $post_id, "ct_builder_shortcodes_revisions" );
+        $revisions = self::get_post_meta_db( $post_id, "_ct_builder_shortcodes_revisions" );
 
         $found = false;
         if( is_array( $revisions ) ) {
@@ -85,11 +85,11 @@ class Oxygen_Revisions {
         $found->meta_value = oxygen_safe_convert_old_shortcodes_to_json($found->meta_value);
 
         // Create another revision of what's currently saved, if it's not saved yet
-        if( !metadata_exists( "post", $post_id, "ct_current_revision" ) ) $revision_created = self::create_revision( $post_id );
+        if( !metadata_exists( "post", $post_id, "_ct_current_revision" ) ) $revision_created = self::create_revision( $post_id );
 
         // Restore the shortcodes with what we found in the specified revision
-        update_post_meta( $post_id, 'ct_builder_json', addslashes($found->meta_value) );
-        update_post_meta( $post_id, 'ct_current_revision', $found->meta_id );
+        oxy_update_post_meta( $post_id, 'ct_builder_json', addslashes($found->meta_value) );
+        oxy_update_post_meta( $post_id, 'ct_current_revision', $found->meta_id );
 
         // Re-generate the CSS cache for the post
 	    oxygen_vsb_cache_page_css( $post_id, $found->meta_value );
@@ -98,33 +98,33 @@ class Oxygen_Revisions {
     }
 
     static function render_revisions_list( $post_id, $template = false ){
-        if( !metadata_exists( "post", $post_id, "ct_builder_shortcodes_revisions" ) ) return;
-        $revisions = self::get_post_meta_db( $post_id, "ct_builder_shortcodes_revisions" );
-        $dates = self::get_post_meta_db( $post_id, "ct_builder_shortcodes_revisions_dates" );
+        if( !metadata_exists( "post", $post_id, "_ct_builder_shortcodes_revisions" ) ) return;
+        $revisions = self::get_post_meta_db( $post_id, "_ct_builder_shortcodes_revisions" );
+        $dates = self::get_post_meta_db( $post_id, "_ct_builder_shortcodes_revisions_dates" );
         if( !is_array( $revisions ) ) $revisions = array( $revisions );
-        $current_revision = get_post_meta( $post_id,'ct_current_revision',true );
+        $current_revision = oxy_get_post_meta( $post_id,'ct_current_revision',true );
         $preview_parameter = $template ? "oxy_preview_template_revision" : "oxy_preview_revision";
-        $is_reusable = ( get_post_meta( $post_id, 'ct_template_type', true ) == "reusable_part" );
+        $is_reusable = ( oxy_get_post_meta( $post_id, 'ct_template_type', true ) == "reusable_part" );
 
         if( $template ) {
 
             $template_id = $post_id;
 
             $catch_all = false;
-	        if(!get_post_meta( $template_id, 'ct_template_all_archives', true )
-	           && !get_post_meta( $template_id, 'ct_template_single_all', true )
-	           && !get_post_meta( $template_id, 'ct_template_post_types', true )
-	           && !get_post_meta( $template_id, 'ct_template_all_archives', true )
-	           && !get_post_meta( $template_id, 'ct_template_apply_if_archive_among_taxonomies', true )
-	           && !get_post_meta( $template_id, 'ct_template_apply_if_archive_among_cpt', true )
-	           && !get_post_meta( $template_id, 'ct_template_apply_if_archive_among_authors', true )
-	           && !get_post_meta( $template_id, 'ct_template_date_archive', true )
-	           && !get_post_meta( $template_id, 'ct_template_front_page', true )
-	           && !get_post_meta( $template_id, 'ct_template_blog_posts', true )
-	           && !get_post_meta( $template_id, 'ct_template_search_page', true )
-	           && !get_post_meta( $template_id, 'ct_template_404_page', true )
-	           && !get_post_meta( $template_id, 'ct_template_inner_content', true )
-	           && !get_post_meta( $template_id, 'ct_template_index', true )) {
+	        if(!oxy_get_post_meta( $template_id, 'ct_template_all_archives', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_single_all', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_post_types', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_all_archives', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_taxonomies', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_cpt', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_authors', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_date_archive', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_front_page', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_blog_posts', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_search_page', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_404_page', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_inner_content', true )
+	           && !oxy_get_post_meta( $template_id, 'ct_template_index', true )) {
 		        $catch_all = true;
 	        }
 
@@ -163,19 +163,19 @@ class Oxygen_Revisions {
         }
 ?>
         <div>
-            <span id="ct-toggle-revisions"><?php _e( "Revisions", "component-theme" ); ?></span><div class="oxy-tooltip"><div class="oxy-tooltip-text revisions"><?php _e( "Restore previous versions of this post or template's design. Restoring a revision will not affect any changes for site-wide settings like Global Styles, Fonts, or Classes.", "oxygen" ) ?></div></div>
+            <span id="ct-toggle-revisions"><?php oxygen_translate_echo( "Revisions", "component-theme" ); ?></span><div class="oxy-tooltip"><div class="oxy-tooltip-text revisions"><?php oxygen_translate_echo( "Restore previous versions of this post or template's design. Restoring a revision will not affect any changes for site-wide settings like Global Styles, Fonts, or Classes.", "oxygen" ) ?></div></div>
         </div>
         <div id="ct-builder-revisions" style="display:none">
 	        <?php if( $template && !$is_reusable ): ?>
-                <span id="ct_preview_revision_select_label"><?php echo __("Preview template with this post: ", 'component_theme'); ?></span>
+                <span id="ct_preview_revision_select_label"><?php echo oxygen_translate("Preview template with this post: ", 'component_theme'); ?></span>
                 <select id="ct_preview_revision_select">
                 </select>
 	        <?php endif; ?>
             <ul id="ct_builder_revisions" style="height:auto!important;">
                 <?php for($i = count($revisions) -1; $i >= 0; $i--): $revision_date = get_date_from_gmt( date('Y-m-d H:i:s', intval( $dates[$i]->meta_value ) ) ); ?>
-                    <li><?php echo __("Revision created automatically on ", 'component_theme') . $revision_date ?>
+                    <li><?php echo oxygen_translate("Revision created automatically on ", 'component_theme') . $revision_date ?>
                         <?php if( $current_revision == $revisions[$i]->meta_id ): ?>
-                            <?php echo __( ' (current)', 'component_theme' ); ?>
+                            <?php echo oxygen_translate( ' (current)', 'component_theme' ); ?>
                         <?php else: ?>
                             <?php
                                 $revision = $revisions[$i]->meta_id;
@@ -185,9 +185,9 @@ class Oxygen_Revisions {
                                 if( $is_reusable) {
                                     $permalink = get_permalink( $post_id );
                                 }
-                                echo "<a class='oxygen-preview-revision' href='javascript:;' target='_blank' data-revision='$revision' data-permalink='$permalink' data-restorelink='$restorelink' data-parameter='$preview_parameter' data-date='$revision_date' data-template='" . ($template ? 'true' : 'false') . "'>" . __( 'Preview', 'component_theme' ) . "</a> ";
-		                        echo "<a class='oxygen-restore-revision' href='" . $restorelink . "'>" . __( 'Restore', 'component_theme' ) . "</a>";
-		                        echo " <a class='oxygen-delete-revision' href='" . $deletelink . "'>" . __( 'Delete', 'component_theme' ) . "</a>";
+                                echo "<a class='oxygen-preview-revision' href='javascript:;' target='_blank' data-revision='$revision' data-permalink='$permalink' data-restorelink='$restorelink' data-parameter='$preview_parameter' data-date='$revision_date' data-template='" . ($template ? 'true' : 'false') . "'>" . oxygen_translate( 'Preview', 'component_theme' ) . "</a> ";
+		                        echo "<a class='oxygen-restore-revision' href='" . $restorelink . "'>" . oxygen_translate( 'Restore', 'component_theme' ) . "</a>";
+		                        echo " <a class='oxygen-delete-revision' href='" . $deletelink . "'>" . oxygen_translate( 'Delete', 'component_theme' ) . "</a>";
                             ?>
 
                         <?php endif; ?>
@@ -196,7 +196,7 @@ class Oxygen_Revisions {
             </ul>
             <?php 
             $delete_all_link = get_edit_post_link( $post_id, '' ) . '&ct_delete_all_revisions=' . $post_id .'&wp_nonce=' . wp_create_nonce( 'ct_delete_all_revisions' );
-            echo "<a id='oxygen-delete-all-revisions' href='" . $delete_all_link . "'>" . __( 'Delete All Post Revisions', 'component_theme' ) . "</a>"; ?>
+            echo "<a id='oxygen-delete-all-revisions' href='" . $delete_all_link . "'>" . oxygen_translate( 'Delete All Post Revisions', 'component_theme' ) . "</a>"; ?>
         </div>
 <?php
     }
@@ -228,14 +228,14 @@ class Oxygen_Revisions {
 
             if( wp_verify_nonce( $_GET['wp_nonce'], 'ct_delete_all_revisions' ) ) {
                 $post_id = $_GET['ct_delete_all_revisions'];
-                delete_post_meta( $post_id, "ct_builder_shortcodes_revisions" );
-                delete_post_meta( $post_id, "ct_builder_shortcodes_revisions_dates" );
+                delete_post_meta( $post_id, "_ct_builder_shortcodes_revisions" );
+                delete_post_meta( $post_id, "_ct_builder_shortcodes_revisions_dates" );
             }
         }
     } 
 
     /**
-     * Alternative to get_post_meta(), to retrieve meta_ids. @see get_meta_db()
+     * Alternative to oxy_get_post_meta(), to retrieve meta_ids. @see get_meta_db()
      */
     static function get_post_meta_db( $post_id, $meta_key = null, $single = false, $meta_val = null, $output = OBJECT, $mid = null ){
         return self::get_meta_db( 'post', $post_id, $meta_key, $meta_val, $single, $output, $mid );

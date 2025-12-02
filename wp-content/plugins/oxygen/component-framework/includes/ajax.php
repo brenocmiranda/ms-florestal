@@ -213,19 +213,19 @@ function ct_save_components_tree_as_post() {
 	
 
 	// Save as post Meta (NEW WAY)
-	update_post_meta( $post_id, 'ct_builder_shortcodes', $shortcodes );
+	oxy_update_post_meta( $post_id, 'ct_builder_shortcodes', $shortcodes );
 	
 	$components_tree_json = preg_replace_callback('/\[oxygen ([^\]]*)\]/i', 'ct_sign_oxy_dynamic_shortcode', $components_tree_json);
-	update_post_meta( $post_id, 'ct_builder_json', addslashes($components_tree_json) );
+	oxy_update_post_meta( $post_id, 'ct_builder_json', addslashes($components_tree_json) );
 
 	if( !empty($preview_url) ) {
-		update_post_meta( $post_id, 'ct_preview_url', $preview_url );
+		oxy_update_post_meta( $post_id, 'ct_preview_url', $preview_url );
 	}
 
 	do_action( 'save_post', $post_id, get_post( $post_id ), true );
   	
   	// Process settings
-  	$page_settings_saved 	= update_post_meta( $post_id, "ct_page_settings", $page_settings );
+  	$page_settings_saved 	= oxy_update_post_meta( $post_id, "ct_page_settings", $page_settings );
   	$global_settings_saved 	= update_option("ct_global_settings", $global_settings );
   	$classes_saved 			= update_option("ct_components_classes", $classes, get_option("oxygen_options_autoload"));
 	// update global classes variable for correct further CSS generation
@@ -537,18 +537,13 @@ function ct_save_component_as_view() {
 	}
 
 	$component 	= file_get_contents('php://input');
-	$tree 		= json_decode($component, true);
+	$tree_shortcodes = json_decode($component, true);
+	$tree_json 		 = json_decode($component, true);
 
-	// base64 encode js and css code in the IDs
-	$tree["children"] = ct_base64_encode_decode_tree($tree['children']);
-
-	$component = json_encode($tree);
-
-	//var_dump($component);
-
+	// base64 encode js and css code in the IDs for Shortcodes ONLY
+	$tree_shortcodes["children"] = ct_base64_encode_decode_tree($tree_shortcodes['children']);
+	$component = json_encode($tree_shortcodes);
 	$shortcodes = components_json_to_shortcodes( $component, true );
-
-	//var_dump($shortcodes);
 
 	$post = array(
 		'post_title'	=> $name,
@@ -563,16 +558,16 @@ function ct_save_component_as_view() {
 	
 	if ( $post_id !== 0 ) {
 		if($isBlock){
-            update_post_meta( $post_id, 'ct_other_template', -1);
+            oxy_update_post_meta( $post_id, 'ct_other_template', -1);
         }else{
-			update_post_meta( $post_id, 'ct_template_type', "reusable_part");
+			oxy_update_post_meta( $post_id, 'ct_template_type', "reusable_part");
         }
-		update_post_meta( $post_id, 'ct_builder_shortcodes', $shortcodes );
+		oxy_update_post_meta( $post_id, 'ct_builder_shortcodes', $shortcodes );
 
-		$tree['children'] = ct_update_ids( $tree['children'], 1, $tree );
-		$components_tree_json = json_encode($tree, JSON_UNESCAPED_UNICODE);
+		$tree_json['children'] = ct_update_ids( $tree_json['children'], 1, $tree_json );
+		$components_tree_json = json_encode($tree_json, JSON_UNESCAPED_UNICODE);
 		$components_tree_json = preg_replace_callback('/\[oxygen ([^\]]*)\]/i', 'ct_sign_oxy_dynamic_shortcode', $components_tree_json);
-		update_post_meta( $post_id, 'ct_builder_json', addslashes($components_tree_json) );
+		oxy_update_post_meta( $post_id, 'ct_builder_json', addslashes($components_tree_json) );
 
 		oxygen_vsb_cache_page_css($post_id, $shortcodes);
 	}
@@ -822,10 +817,10 @@ function ct_get_components_tree() {
 	$post_type = get_post_type($id);
 	if($post_type === 'ct_template' && $ct_inner) {
 		$singular_shortcodes = oxygen_get_combined_shortcodes($id, true);
-		$template_id = get_post_meta( $id, "ct_parent_template", true);
+		$template_id = oxy_get_post_meta( $id, "ct_parent_template", true);
 	}
 	else {
-		$singular_shortcodes = get_post_meta($id, "ct_builder_shortcodes", true);
+		$singular_shortcodes = oxy_get_post_meta($id, "ct_builder_shortcodes", true);
 
 		// check for the validity of the $singular_shortcodes here only
 		$singular_shortcodes = parse_shortcodes($singular_shortcodes, false);
@@ -833,7 +828,7 @@ function ct_get_components_tree() {
 	
 	if ($post_type !== 'ct_template' && $ct_inner ) {
 		
-		$ct_other_template = get_post_meta( $id, "ct_other_template", true );
+		$ct_other_template = oxy_get_post_meta( $id, "ct_other_template", true );
 
 		$template = false;
 		if(!empty($ct_other_template) && $ct_other_template > 0) { // no template is specified
@@ -866,7 +861,7 @@ function ct_get_components_tree() {
 			$template_id = $template->ID;
 		} else { // does not even have a default template
 			// then use it as a standalone custom view
-			$shortcodes = get_post_meta( $id, "ct_builder_shortcodes", true );
+			$shortcodes = oxy_get_post_meta( $id, "ct_builder_shortcodes", true );
 			$shortcodes = parse_shortcodes( $shortcodes );
 		}
 
@@ -928,7 +923,7 @@ function ct_get_components_tree() {
 	// base 64 decode all the custom-css and custom-js down the tree
 	$tree = json_decode($json, true);
 
-	$not_registered_shortcodes = oxygen_has_not_registered_shortcodes(get_post_meta( $post_id, "ct_builder_shortcodes", true ));
+	$not_registered_shortcodes = oxygen_has_not_registered_shortcodes(oxy_get_post_meta( $post_id, "ct_builder_shortcodes", true ));
 	if ($not_registered_shortcodes) {
 		$tree['notRegisteredShortcodes'] = $not_registered_shortcodes;
 	}
@@ -982,13 +977,13 @@ function ct_get_components_tree_json() {
 	// template that has parent
 	if($post_type === 'ct_template' && $ct_inner) {
 		$singular_tree = oxygen_get_combined_tree($id, true);
-		$template_id = get_post_meta( $id, "ct_parent_template", true);
+		$template_id = oxy_get_post_meta( $id, "ct_parent_template", true);
 	}
 	// not a template or have no parent
 	else {
-		$singular_json = get_post_meta($id, "ct_builder_json", true);
+		$singular_json = oxy_get_post_meta($id, "ct_builder_json", true);
 		if (!$singular_json) {
-			$singular_shortcodes = get_post_meta($id, "ct_builder_shortcodes", true);
+			$singular_shortcodes = oxy_get_post_meta($id, "ct_builder_shortcodes", true);
 			$parsed_shortcodes = parse_shortcodes($singular_shortcodes, false);
 			if(isset($parsed_shortcodes['content'])) {
 				$parsed_shortcodes['content'] = ct_base64_encode_decode_tree($parsed_shortcodes['content'], true);
@@ -1008,7 +1003,7 @@ function ct_get_components_tree_json() {
 	// regaulr page rendered with template
 	if ($post_type !== 'ct_template' && $ct_inner ) {
 		
-		$ct_other_template = get_post_meta( $id, "ct_other_template", true );
+		$ct_other_template = oxy_get_post_meta( $id, "ct_other_template", true );
 
 		$template = false;
 		if(!empty($ct_other_template) && $ct_other_template > 0) { // no template is specified
@@ -1040,7 +1035,7 @@ function ct_get_components_tree_json() {
 		} else { 
 			// does not even have a default template
 			// then use it as a standalone custom view
-			$json = get_post_meta( $id, "ct_builder_json", true );
+			$json = oxy_get_post_meta( $id, "ct_builder_json", true );
 			$tree = json_decode( $json, true );
 		}
 
@@ -1218,7 +1213,7 @@ function ct_render_widget_by_ajax() {
 		wp_print_styles( $wp_styles->queue );
 	}
 	else {
-		printf( __("<b>Error!</b><br/> No '%s' widget registered in this installation", "component-theme"), $options['class_name'] );
+		printf( oxygen_translate("<b>Error!</b><br/> No '%s' widget registered in this installation", "component-theme"), $options['class_name'] );
 	}
 
 	die();
@@ -1298,7 +1293,7 @@ function ct_render_widget_form_by_ajax() {
 		//wp_footer();
 	}
 	else {
-		printf( __("<b>Error!</b><br/> No '%s' widget registered in this installation", "component-theme"), $options['class_name'] );
+		printf( oxygen_translate("<b>Error!</b><br/> No '%s' widget registered in this installation", "component-theme"), $options['class_name'] );
 	}
 
 	die();
@@ -1338,7 +1333,7 @@ function ct_render_sidebar_by_ajax() {
 		<ul><?php dynamic_sidebar( $options['sidebar_id'] ); ?></ul>
 	<?php }
 	else {
-		printf( __("<b>Warning:</b> No '%s' sidebar active in this installation", "component-theme"), $options['sidebar_id'] );
+		printf( oxygen_translate("<b>Warning:</b> No '%s' sidebar active in this installation", "component-theme"), $options['sidebar_id'] );
 	}
 
 	die();
@@ -1450,20 +1445,20 @@ function ct_get_template_data() {
 
 	// if no option is selected (as to where this template applies, enforce all options)
 	$catch_all = false;
-	if(!get_post_meta( $template_id, 'ct_template_all_archives', true )
-		&& !get_post_meta( $template_id, 'ct_template_single_all', true )
-		&& !get_post_meta( $template_id, 'ct_template_post_types', true )
-		&& !get_post_meta( $template_id, 'ct_template_all_archives', true )
-		&& !get_post_meta( $template_id, 'ct_template_apply_if_archive_among_taxonomies', true )
-		&& !get_post_meta( $template_id, 'ct_template_apply_if_archive_among_cpt', true )
-		&& !get_post_meta( $template_id, 'ct_template_apply_if_archive_among_authors', true )
-		&& !get_post_meta( $template_id, 'ct_template_date_archive', true )
-		&& !get_post_meta( $template_id, 'ct_template_front_page', true )
-		&& !get_post_meta( $template_id, 'ct_template_blog_posts', true )
-		&& !get_post_meta( $template_id, 'ct_template_search_page', true )
-		&& !get_post_meta( $template_id, 'ct_template_404_page', true )
-		&& !get_post_meta( $template_id, 'ct_template_inner_content', true )
-		&& !get_post_meta( $template_id, 'ct_template_index', true )) {
+	if(!oxy_get_post_meta( $template_id, 'ct_template_all_archives', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_single_all', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_post_types', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_all_archives', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_taxonomies', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_cpt', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_authors', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_date_archive', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_front_page', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_blog_posts', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_search_page', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_404_page', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_inner_content', true )
+		&& !oxy_get_post_meta( $template_id, 'ct_template_index', true )) {
 		$catch_all = true;
 	}
 
@@ -1527,8 +1522,8 @@ function ct_get_template_data() {
 	if(isset($data['postsList']) && is_array($data['postsList'])) {
 		foreach($data['postsList'] as $key => $item) {
 			// if the item has shortcodes
-			$json 		= get_post_meta($item['id'], 'ct_builder_json', true);
-			$shortcodes = get_post_meta($item['id'], 'ct_builder_shortcodes', true);
+			$json 		= oxy_get_post_meta($item['id'], 'ct_builder_json', true);
+			$shortcodes = oxy_get_post_meta($item['id'], 'ct_builder_shortcodes', true);
 
 			if(!isset($data['default'])) {
 				if(
@@ -1858,7 +1853,7 @@ function ct_exec_code() {
 		eval( ' ?>' . $code . '<?php ' );
 	}
 	else {
-		_e('No code found', 'component-theme');
+		oxygen_translate_echo('No code found', 'component-theme');
 	}
 
 	/* Restore original Post Data. Do we actually need this? */
@@ -2186,13 +2181,13 @@ function ct_recursively_manage_reusables($children, $source_info, $source) {
 
 			// 	$new_id = wp_insert_post($post_data);
 
-			// 	update_post_meta($new_id_map[$template['ID']], 'ct_template_type', $template['template_type']);
+			// 	oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_type', $template['template_type']);
 
-			// 	update_post_meta($new_id, 'ct_source_site', $source);
-			// 	update_post_meta($new_id, 'ct_source_post', $children[$key]['options']['view_id']);
+			// 	oxy_update_post_meta($new_id, 'ct_source_site', $source);
+			// 	oxy_update_post_meta($new_id, 'ct_source_post', $children[$key]['options']['view_id']);
 				
-			// 	update_post_meta($new_id, 'ct_builder_shortcodes', $shortcodes);
-			// 	update_post_meta($new_id, 'ct_template_type', 'reusable_part');
+			// 	oxy_update_post_meta($new_id, 'ct_builder_shortcodes', $shortcodes);
+			// 	oxy_update_post_meta($new_id, 'ct_template_type', 'reusable_part');
 
 			// 	$children[$key]['options']['view_id'] = $new_id;
 
@@ -2254,7 +2249,7 @@ function ct_get_page_from_source() {
 
 		if(isset($component['children'])) {
 			
-			$data = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='ct_source_site' AND meta_value='".$wpdb->prepare(base64_decode($source), array())."'");
+			$data = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='_ct_source_site' AND meta_value='".$wpdb->prepare(base64_decode($source), array())."'");
 			$source_info = array();
 
 			if (is_array($data) && !empty($data)) {
@@ -2344,7 +2339,7 @@ function ct_get_component_from_source() {
 	if(isset($component['children'])) {
 
 		global $wpdb;
-		$data = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='ct_source_site' AND meta_value='".$wpdb->prepare(base64_decode($source), array())."'");
+		$data = $wpdb->get_results("SELECT * FROM `".$wpdb->postmeta."` WHERE meta_key='_ct_source_site' AND meta_value='".$wpdb->prepare(base64_decode($source), array())."'");
 		$source_info = array();
 
 		if (is_array($data) && !empty($data)) {
@@ -2482,11 +2477,11 @@ function ct_setup_default_pages($site, $accessKey = '') {
 		// we don't need anything to be output by custom shortcodes
 		ob_clean();
 
-		update_post_meta($new_id_map[$page['ID']], 'ct_builder_shortcodes', $shortcodes);
-		update_post_meta($new_id_map[$page['ID']], 'ct_other_template', (isset($templates_id_map[$page['other_template']])?$templates_id_map[$page['other_template']]:$page['other_template']));
+		oxy_update_post_meta($new_id_map[$page['ID']], 'ct_builder_shortcodes', $shortcodes);
+		oxy_update_post_meta($new_id_map[$page['ID']], 'ct_other_template', (isset($templates_id_map[$page['other_template']])?$templates_id_map[$page['other_template']]:$page['other_template']));
 		$wrap_shortcodes['children'] = ct_base64_encode_decode_tree($wrap_shortcodes['children'], true);
 
-		update_post_meta($new_id_map[$page['ID']], 'ct_builder_json', addslashes(json_encode(
+		oxy_update_post_meta($new_id_map[$page['ID']], 'ct_builder_json', addslashes(json_encode(
 			array(
 				'ct_id' => 0,
 				'name' => 'root',
@@ -3329,22 +3324,22 @@ function ct_setup_default_templates($site, $delete = false, $accessKey = '') {
 				}
 				else {
 					// unset the template
-					delete_post_meta($template->id, 'ct_template_single_all');
-					delete_post_meta($template->id, 'ct_template_post_types');
-					delete_post_meta($template->id, 'ct_use_template_taxonomies');
-					delete_post_meta($template->id, 'ct_template_apply_if_post_of_parents');
+					delete_post_meta($template->id, '_ct_template_single_all');
+					delete_post_meta($template->id, '_ct_template_post_types');
+					delete_post_meta($template->id, '_ct_use_template_taxonomies');
+					delete_post_meta($template->id, '_ct_template_apply_if_post_of_parents');
 
-					delete_post_meta($template->id, 'ct_template_all_archives');
-					delete_post_meta($template->id, 'ct_template_apply_if_archive_among_taxonomies');
-					delete_post_meta($template->id, 'ct_template_apply_if_archive_among_cpt');
-					delete_post_meta($template->id, 'ct_template_apply_if_archive_among_authors');
-					delete_post_meta($template->id, 'ct_template_date_archive');
+					delete_post_meta($template->id, '_ct_template_all_archives');
+					delete_post_meta($template->id, '_ct_template_apply_if_archive_among_taxonomies');
+					delete_post_meta($template->id, '_ct_template_apply_if_archive_among_cpt');
+					delete_post_meta($template->id, '_ct_template_apply_if_archive_among_authors');
+					delete_post_meta($template->id, '_ct_template_date_archive');
 
-					delete_post_meta($template->id, 'ct_template_front_page');
-					delete_post_meta($template->id, 'ct_template_blog_posts');
-					delete_post_meta($template->id, 'ct_template_search_page');
-					delete_post_meta($template->id, 'ct_template_404_page');
-					delete_post_meta($template->id, 'ct_template_index');
+					delete_post_meta($template->id, '_ct_template_front_page');
+					delete_post_meta($template->id, '_ct_template_blog_posts');
+					delete_post_meta($template->id, '_ct_template_search_page');
+					delete_post_meta($template->id, '_ct_template_404_page');
+					delete_post_meta($template->id, '_ct_template_index');
 
 					// and rename
 					if(strpos($template->post_title, 'inactive - ') === false) {
@@ -3435,11 +3430,11 @@ function ct_setup_default_templates($site, $delete = false, $accessKey = '') {
 			// we don't need anything to be output by custom shortcodes
 			ob_clean();
 
-			update_post_meta($new_id_map[$template['ID']], 'ct_builder_shortcodes', $shortcodes);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_type', $template['template_type']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_builder_shortcodes', $shortcodes);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_type', $template['template_type']);
 			$wrap_shortcodes['children'] = ct_base64_encode_decode_tree($wrap_shortcodes['children'], true);
 			
-			update_post_meta($new_id_map[$template['ID']], 'ct_builder_json', addslashes(json_encode(
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_builder_json', addslashes(json_encode(
 				array(
 					'ct_id' => 0,
 					'name' => 'root',
@@ -3452,18 +3447,18 @@ function ct_setup_default_templates($site, $delete = false, $accessKey = '') {
 			oxygen_vsb_cache_page_css($new_id_map[$template['ID']], $shortcodes);
 
 			if(isset($template['template_type']) && $template['template_type'] == 'reusable_part') { // store the source parameters to check for redundancy while importing re-usables again
-				update_post_meta($new_id_map[$template['ID']], 'ct_source_site', $site);
-				update_post_meta($new_id_map[$template['ID']], 'ct_source_post', $template['ID']);
+				oxy_update_post_meta($new_id_map[$template['ID']], 'ct_source_site', $site);
+				oxy_update_post_meta($new_id_map[$template['ID']], 'ct_source_post', $template['ID']);
 			}
 
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_order', $template['template_order']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_order', $template['template_order']);
 			if (isset($template['parent_template']) && $template['parent_template']) {
-				update_post_meta($new_id_map[$template['ID']], 'ct_parent_template', $new_id_map[$template['parent_template']]);
+				oxy_update_post_meta($new_id_map[$template['ID']], 'ct_parent_template', $new_id_map[$template['parent_template']]);
 			}
 
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_single_all', $template['template_single_all']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_post_types', $template['template_post_types']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_use_template_taxonomies', $template['use_template_taxonomies']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_single_all', $template['template_single_all']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_post_types', $template['template_post_types']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_use_template_taxonomies', $template['use_template_taxonomies']);
 			
 			// match id to slug for each taxonomy
 			if(isset($template['template_taxonomies']) && is_array($template['template_taxonomies'])) {
@@ -3487,11 +3482,11 @@ function ct_setup_default_templates($site, $delete = false, $accessKey = '') {
 				$template['template_taxonomies'] = array();
 			}
 
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_taxonomies', $template['template_taxonomies']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_apply_if_post_of_parents', $template['template_apply_if_post_of_parents']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_post_of_parents', $template['template_post_of_parents']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_all_archives', $template['template_all_archives']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_apply_if_archive_among_taxonomies', $template['template_apply_if_archive_among_taxonomies']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_taxonomies', $template['template_taxonomies']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_apply_if_post_of_parents', $template['template_apply_if_post_of_parents']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_post_of_parents', $template['template_post_of_parents']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_all_archives', $template['template_all_archives']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_apply_if_archive_among_taxonomies', $template['template_apply_if_archive_among_taxonomies']);
 
 			// match id to slug for each taxonomy
 			if(isset($template['template_archive_among_taxonomies']) && is_array($template['template_archive_among_taxonomies'])) {
@@ -3512,19 +3507,19 @@ function ct_setup_default_templates($site, $delete = false, $accessKey = '') {
 				$template['template_archive_among_taxonomies'] = array();
 			}
 			
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_archive_among_taxonomies', $template['template_archive_among_taxonomies']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_apply_if_archive_among_cpt', $template['template_apply_if_archive_among_cpt']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_archive_post_types', $template['template_archive_post_types']);
-			// update_post_meta($new_id_map[$template['ID']], 'ct_template_apply_if_archive_among_authors', $template['template_apply_if_archive_among_authors']);
-			// update_post_meta($new_id_map[$template['ID']], 'ct_template_authors_archives', $template['template_authors_archives']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_date_archive', $template['template_date_archive']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_front_page', $template['template_front_page']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_blog_posts', $template['template_blog_posts']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_search_page', $template['template_search_page']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_404_page', $template['template_404_page']);
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_index', $template['template_index']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_archive_among_taxonomies', $template['template_archive_among_taxonomies']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_apply_if_archive_among_cpt', $template['template_apply_if_archive_among_cpt']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_archive_post_types', $template['template_archive_post_types']);
+			// oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_apply_if_archive_among_authors', $template['template_apply_if_archive_among_authors']);
+			// oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_authors_archives', $template['template_authors_archives']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_date_archive', $template['template_date_archive']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_front_page', $template['template_front_page']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_blog_posts', $template['template_blog_posts']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_search_page', $template['template_search_page']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_404_page', $template['template_404_page']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_index', $template['template_index']);
 
-			update_post_meta($new_id_map[$template['ID']], 'ct_template_inner_content', $template['ct_template_inner_content']);
+			oxy_update_post_meta($new_id_map[$template['ID']], 'ct_template_inner_content', $template['ct_template_inner_content']);
 			
 		}
 
@@ -3819,7 +3814,7 @@ function oxygen_vsb_sign_shortcodes($type) {
 				'numberposts' => -1,
 				'orderby' => 'ID',
 				'order' => 'ASC',
-				'meta_key' => 'ct_builder_shortcodes',
+				'meta_key' => '_ct_builder_shortcodes',
 			)
 		);
 		$page_ids = array_map(function($page){
@@ -3834,7 +3829,7 @@ function oxygen_vsb_sign_shortcodes($type) {
 		$page_id = $page_ids[$index];
 		
 		// get the shortcodes of the page
-		$shortcodes = get_post_meta($page_id, 'ct_builder_shortcodes', true);
+		$shortcodes = oxy_get_post_meta($page_id, 'ct_builder_shortcodes', true);
 		
 
 		if($shortcodes) {
@@ -3851,12 +3846,12 @@ function oxygen_vsb_sign_shortcodes($type) {
 				//save again and re-sign in the process
 				$shortcodes = parse_components_tree($tree['content']);
 
-				update_post_meta($page_id, 'ct_builder_shortcodes', $shortcodes);
+				oxy_update_post_meta($page_id, 'ct_builder_shortcodes', $shortcodes);
 				$tree['content'] = ct_base64_encode_decode_tree($tree['content'], true);
 				// create JSON if no present
-				$json = get_post_meta($page_id, 'ct_builder_json', true);
+				$json = oxy_get_post_meta($page_id, 'ct_builder_json', true);
 				if (!$json) {
-					update_post_meta($page_id, 'ct_builder_json', addslashes(json_encode(
+					oxy_update_post_meta($page_id, 'ct_builder_json', addslashes(json_encode(
 						array(
 							'id' => 0,
 							'name' => 'root',
@@ -4074,7 +4069,7 @@ function delete_all_oxygen_revisions() {
 	$nonce = $_REQUEST['nonce'];
 
 	if ( ! wp_verify_nonce( $nonce, 'oxygen-nonce-revisions' ) ) {
-		die( __( 'Security check', 'oxygen' ) ); 
+		die( oxygen_translate( 'Security check', 'oxygen' ) ); 
 	} 
 
 	global $wpdb;
@@ -4082,14 +4077,14 @@ function delete_all_oxygen_revisions() {
 	$wpdb->query( 
 		$wpdb->prepare( 
 			"DELETE FROM $wpdb->postmeta WHERE meta_key = %s",
-			'ct_builder_shortcodes_revisions_dates'
+			'_ct_builder_shortcodes_revisions_dates'
 		)
 	);
 
 	$deleted_rows = $wpdb->query( 
 		$wpdb->prepare( 
 			"DELETE FROM $wpdb->postmeta WHERE meta_key = %s",
-			'ct_builder_shortcodes_revisions'
+			'_ct_builder_shortcodes_revisions'
 		)
 	);
 

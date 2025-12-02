@@ -55,17 +55,17 @@ Class CT_Inner_Content extends CT_Component {
 			$shortcodes = "no shortcodes";
 		}
 		else {
-			$json = get_post_meta( $post_id, 'ct_builder_json', true );
+			$json = oxy_get_post_meta( $post_id, 'ct_builder_json', true );
 			$components_tree = json_decode($json, true);
 
 			if ($components_tree) {
 				$html = do_oxygen_elements($components_tree['children']);
 			}
 			else {
-				$shortcodes = get_post_meta( $post_id, 'ct_builder_shortcodes', true );
+				$shortcodes = oxy_get_post_meta( $post_id, 'ct_builder_shortcodes', true );
 			}
 			
-			if( class_exists('Oxygen_Gutenberg') && get_post_meta( $post_id, 'ct_oxygenberg_full_page_block', true ) == '1' ) {
+			if( class_exists('Oxygen_Gutenberg') && oxy_get_post_meta( $post_id, 'ct_oxygenberg_full_page_block', true ) == '1' ) {
 				$post = get_post($post_id);
 				$blocks = do_blocks( $post->post_content );
 			}
@@ -77,13 +77,13 @@ Class CT_Inner_Content extends CT_Component {
 			$template = ct_get_inner_content_template();
 
 			if($template) {
-				$json = get_post_meta($template->ID, 'ct_builder_json', true);
+				$json = oxy_get_post_meta($template->ID, 'ct_builder_json', true);
 				$json = json_decode($json, true);
 				if (isset($json['children']) && is_array($json['children']) && count($json['children'])>0) {
 					echo do_oxygen_elements($json['children']);
 				}
 				else{
-					$shortcodes = get_post_meta($template->ID, 'ct_builder_shortcodes', true);
+					$shortcodes = oxy_get_post_meta($template->ID, 'ct_builder_shortcodes', true);
 					$json = "";
 				}
 			}
@@ -193,7 +193,7 @@ $oxygen_vsb_components['inner_content'] = new CT_Inner_Content( array(
 			'params' 	=> array(
 					array(
 						"type" 			=> "tag",
-						"heading" 		=> __("Tag", "oxygen"),
+						"heading" 		=> oxygen_translate("Tag", "oxygen"),
 						"param_name" 	=> "tag",
 						"value" 		=> array (
 											"div" 		=> "div",

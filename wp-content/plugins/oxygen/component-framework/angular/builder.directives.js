@@ -843,7 +843,7 @@ CTFrontendBuilder.directive("ngBuilderWrap", function ($parentScope, $compile, $
 
                             scope.activateComponent(primary);
                             var imageId = scope.addComponent("ct_image", false, true);
-                            scope.setOptionModel('src', "https://source.unsplash.com/random/480x270", imageId, "ct_image");
+                            scope.setOptionModel('src', "https://picsum.photos/720/405", imageId, "ct_image");
                             scope.setOptionModel('width', "400", imageId, "ct_image");
 
                             scope.activateComponent(secondary);

@@ -9,7 +9,7 @@ use GuzzleHttp\Promise\Is;
  * @author Ilya K.
  */
 
-
+ #[AllowDynamicProperties]
 Class OxygenElement extends OxygenElementControls {
 
 	public $defaults;

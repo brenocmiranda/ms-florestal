@@ -1844,7 +1844,9 @@ CTFrontendBuilder.controller("ControllerOptions", function($scope, $parentScope,
             $scope.findComponentItem($scope.componentsTree.children, id, $scope.updateTreeComponentOptions, component);
         }
 
-        $scope.unsavedChanges();
+        if (optionName!='globalConditionsResult'){
+            $scope.unsavedChanges();
+        }
 
         // refreshHard AOS object if any element AOS setting were updated
         if ( optionName !== undefined && optionName.indexOf('aos-') === 0 ) {

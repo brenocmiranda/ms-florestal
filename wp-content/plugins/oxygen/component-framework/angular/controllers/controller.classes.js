@@ -56,6 +56,9 @@ CTFrontendBuilder.controller("ControllerClasses", function($scope, $parentScope,
         }
     	
         $scope.switchState('original');
+
+        // trigger watch to update CM content
+        $scope.updateCM = !$scope.updateCM;
         
 		//$scope.disableContentEdit();
 

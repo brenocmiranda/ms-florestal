@@ -1498,8 +1498,19 @@
 }
 
 .dom-tree-node-not-registered {
+  background-color: var(--oxy-destructive) !important;
+}
+.dom-tree-node-not-registered .dom-tree-node-options > *:not(.dom-tree-remove-icon) {
+  display: none;
+}
+.dom-tree-node-not-registered .oxy-drag-handle {
+  cursor: pointer;
   pointer-events: none;
-  opacity: 0.3;
+}
+.dom-tree-node:hover
+  > .dom-tree-node-label.dom-tree-node-not-registered
+  .dom-tree-node-options {
+  display: block !important;
 }
 
 #ct-dom-tree-2 > .dom-tree-node {

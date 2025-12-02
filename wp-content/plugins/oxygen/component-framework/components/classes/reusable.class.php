@@ -60,7 +60,7 @@ Class CT_Reusable extends CT_Component {
 			$oxygen_vsb_css_files_to_load[] = $view_id;
 		}
 
-		$json = get_post_meta(  $view->ID, 'ct_builder_json', true );
+		$json = oxy_get_post_meta(  $view->ID, 'ct_builder_json', true );
 		$components_tree = json_decode($json, true);
 		
 		if ($components_tree) {
@@ -75,7 +75,7 @@ Class CT_Reusable extends CT_Component {
 			}
 		}
 		else {
-			$shortcodes = get_post_meta( $view->ID, "ct_builder_shortcodes", true );
+			$shortcodes = oxy_get_post_meta( $view->ID, "ct_builder_shortcodes", true );
 			$content = ct_do_shortcode( $shortcodes );
 		}
 		

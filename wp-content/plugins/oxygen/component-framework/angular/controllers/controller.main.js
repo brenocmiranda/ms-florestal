@@ -14,6 +14,7 @@ CTFrontendBuilder.controller("MainController", function($scope, $parentScope, $h
     ctScopeService.store('scope', $scope);
     // log
     $scope.log = false;
+    $scope.updateCM = false;
     
     $scope.dynamicListActions = {
         actions:[],
@@ -124,6 +125,8 @@ CTFrontendBuilder.controller("MainController", function($scope, $parentScope, $h
     $scope.fixShortcodes = CtBuilderAjax['fixShortcodes'];
     $scope.fixShortcodesFound = false;
     $scope.latestParent = 0;
+
+    $scope.fixUnits = CtBuilderAjax['fixUnits'];
 
     $scope.dynamicListAction = function(instanceId, componentID, doit, virtualTreeItem, data) {
         
@@ -1036,6 +1039,16 @@ CTFrontendBuilder.controller("MainController", function($scope, $parentScope, $h
             range.collapse(false);//collapse the range to the end point. false means collapse to end rather than the start
             range.select();//Select the range (make it the visible selection
         }
+    }
+
+    /**
+     * Select the text of contenteditbale. 
+     *
+     * @since 4.9
+     */
+
+    $scope.selectContentEditableText = function(contentEditableElement) {
+        window.parent.getSelection().selectAllChildren(contentEditableElement);
     }
 
     /**
@@ -1954,7 +1967,7 @@ CTFrontendBuilder.controller("MainController", function($scope, $parentScope, $h
      * @author gagan goraya
      */    
 
-    $scope.setEditableFriendlyName = function(id, event) {
+    $scope.setEditableFriendlyName = function(id, event, selectText) {
 
         if (event) {
             $scope.editableFriendlyNamePropertiesPane = id;
@@ -1973,6 +1986,17 @@ CTFrontendBuilder.controller("MainController", function($scope, $parentScope, $h
 
         item.options['nicename'] = trimmedText;
         $scope.component.options[$scope.component.active.id]['nicename'] = trimmedText;
+
+        if (selectText) {
+            $timeout(function() {
+                var input = jQuery(".oxygen-active-element-name-editable", parent.document)[0];
+                // if fired from the UI
+                if (!input) {
+                    input = jQuery(".oxygen-active-element-name-editable", document)[0];
+                }
+                $scope.selectContentEditableText(input);
+            }, 0);
+        }
        
         // close the menu
         if(id > 0) {
@@ -3591,7 +3615,9 @@ CTFrontendBuilder.controller("MainController", function($scope, $parentScope, $h
         }
 
         var options   = activateAttr +
+                        'oxy-right-click '+
                         'ng-attr-component-id="'+id+'" ' + 
+                        'ng-attr-component-name="'+componentName+'" ' + 
                         'ctevalconditions ' +
                         'ng-class="{\'ct_hidden_by_conditional_logic\': component.options['+id+ '][\'model\'][\'globalConditionsResult\'] === false, \'ct-active\' : parentScope.isActiveId('+id+'),\'ct-active-parent\' : parentScope.isActiveParentId('+id+')&&globalSettings.indicateParents==\'true\''+
                         ((componentName == 'oxy_dynamic_list')?',\'oxy_list_render_single oxy-dynamic-list-edit\':component.options['+id+ '][\'model\'][\'listrendertype\']' :'') +
@@ -5566,6 +5592,18 @@ CTFrontendBuilder.controller("MainController", function($scope, $parentScope, $h
                 callback.apply(context, args);
             }, delay);
         }
+    }
+
+    $scope.stringToHash = function(string) {
+        if (typeof string !== 'string') return false;
+        var hash = 0;
+        if (string.length == 0) return hash;
+        for (i = 0; i < string.length; i++) {
+            char = string.charCodeAt(i);
+            hash = ((hash << 5) - hash) + char;
+            hash = hash & hash;
+        }
+        return hash;
     }
     
 // End MainController

@@ -16,7 +16,7 @@ CTFrontendBuilder.controller("ControllerAJAX", function($scope, $parentScope, $h
             errorMsg = (typeof(message)==='string'?"<h4>"+message+"</h4>":'')
             +"<p><strong>"+(typeof(err)==='string'?err:'')+" "+status+"</strong></p>"
             +"<p>Your server returned a "+status+" error for the request to "+url+".</p>"
-            +"<p><a href='http://oxygenbuilder.com/documentation/troubleshooting/troubleshooting-guide/' style='text-decoration: underline; color: #fff;' target='_blank'>Troubleshooting Guide &raquo;</a></p>";
+            +"<p><a href='http://classic.oxygenbuilder.com/documentation/troubleshooting/troubleshooting-guide/' style='text-decoration: underline; color: #fff;' target='_blank'>Troubleshooting Guide &raquo;</a></p>";
         }
         else {
             errorMsg = (typeof(message)==='string'?"<h4>"+message+"</h4>":'')
@@ -45,7 +45,7 @@ CTFrontendBuilder.controller("ControllerAJAX", function($scope, $parentScope, $h
         }*/
         
         if ($scope.haveNotRegisteredElements()) {
-            $scope.showNoticeModal("<div>This design contains elements registered by another plugin that is no longer active. Please re-activate the appropriate plugins or remove the missing elements before saving.</div>", "ct-notice");
+            $scope.showNoticeModal("<div>This design contains elements registered by another plugin that is no longer active. Please re-activate the appropriate plugins or remove the missing elements before saving. Find the non-registered elements highlighted in the Structure Pane.</div>", "ct-notice");
             return;
         }
 
@@ -1379,6 +1379,10 @@ CTFrontendBuilder.controller("ControllerAJAX", function($scope, $parentScope, $h
                 if(callback) {
                     callback(data['results'], holder, data['pagination']?data['pagination']:null);
                 }
+                if(data['error']) {
+                    var holderElement = $scope.getComponentById(holder.id);
+                    holderElement.html(data['error']).show();
+                }
             } else {
                 component.html('No data received');
             }
@@ -1803,9 +1807,18 @@ CTFrontendBuilder.controller("ControllerAJAX", function($scope, $parentScope, $h
                                 waitOxygenTree(counter);
                             }
                             else {
+                                
+                                if ($scope.fixUnits) {
+                                    $scope.updateAllComponentsCacheStyles();
+                                    // units will be fixed during CSS generation and correct CSS will be generated down below
+                                    $scope.classesCached = false;
+                                    $scope.outputCSSOptions();
+                                }
+
                                 // do necassary updates only after buildComponentsFromTree() is completed and tree is built
                                 $scope.classesCached = false;
                                 $scope.outputCSSOptions();
+                                
                                 // increment id
                                 $scope.component.id++;
                             }
@@ -1896,7 +1909,7 @@ CTFrontendBuilder.controller("ControllerAJAX", function($scope, $parentScope, $h
                 $scope.postsData[postId] = response;
             } 
             catch (err) {
-                console.log(data);console.log(err);
+                console.log(response);console.log(err);
                 $scope.showErrorModal(0, 'Failed to load post data. ID: '+postId, err);
             }
             $parentScope.hideLoadingOverlay("loadPostData()");

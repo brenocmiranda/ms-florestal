@@ -41,7 +41,7 @@ if ( ! $styles ) {
 	// Check if need to include templates CSS
 	if ( isset( $_REQUEST['post_id'] ) ) {
 		
-		$json = get_post_meta($_REQUEST['post_id'],"ct_builder_json",true);
+		$json = oxy_get_post_meta($_REQUEST['post_id'],"ct_builder_json",true);
 
 		if ( $json ) {
 			global $oxygen_doing_oxygen_elements;
@@ -49,7 +49,7 @@ if ( ! $styles ) {
             do_oxygen_elements( json_decode($json, true) );
 		}
 		else {
-			$shortcodes = get_post_meta($_REQUEST['post_id'],"ct_builder_shortcodes",true);
+			$shortcodes = oxy_get_post_meta($_REQUEST['post_id'],"ct_builder_shortcodes",true);
 			do_shortcode($shortcodes);
 		}
 	}

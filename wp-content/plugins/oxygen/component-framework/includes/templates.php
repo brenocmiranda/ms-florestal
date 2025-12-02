@@ -63,7 +63,7 @@ function do_oxygen_elements($node) {
 			
 			if ( ! is_callable( $oxygen_registered_elements[ $tag ] ) ) {
 				/* translators: %s: Shortcode tag. */
-				$message = sprintf( __( 'Attempting to parse a shortcode without a valid callback: %s' ), $tag );
+				$message = sprintf( oxygen_translate( 'Attempting to parse a shortcode without a valid callback: %s' ), $tag );
 				_doing_it_wrong( __FUNCTION__, $message, '4.3.0' );
 				return "";
 			}
@@ -219,11 +219,11 @@ function ct_templates_buffer_start() {
 						the_content();
 
 						wp_link_pages( array(
-							'before'      => '<div><span>' . __( 'Pages:', 'oxygen' ) . '</span>',
+							'before'      => '<div><span>' . oxygen_translate( 'Pages:', 'oxygen' ) . '</span>',
 							'after'       => '</div>',
 							'link_before' => '<span>',
 							'link_after'  => '</span>',
-							'pagelink'    => '<span>' . __( 'Page', 'oxygen' ) . ' </span>%',
+							'pagelink'    => '<span>' . oxygen_translate( 'Page', 'oxygen' ) . ' </span>%',
 							'separator'   => '<span>, </span>',
 						) );
 						?>
@@ -289,7 +289,7 @@ function ct_template_builder_settings() {
 	?>
 	<div class='oxygen-control-wrapper'>
 		<div class='oxygen-control oxygen-template-previewing-control oxygen-editing-list-control'>
-			<label class='oxygen-control-label'><?php _e("Editing","oxygen"); ?></label>
+			<label class='oxygen-control-label'><?php oxygen_translate_echo("Editing","oxygen"); ?></label>
 			<div class="oxygen-select oxygen-select-box-wrapper">
 				<div class="oxygen-select-box">
 					<div class="oxygen-select-box-current" >
@@ -299,11 +299,11 @@ function ct_template_builder_settings() {
 				</div>
 				<div class="oxygen-select-box-options">
 					<div class="oxygen-select-box-option">
-						<input type="text" value="" placeholder="<?php _e("Filter...", "oxygen"); ?>" spellcheck="false"
+						<input type="text" value="" placeholder="<?php oxygen_translate_echo("Filter...", "oxygen"); ?>" spellcheck="false"
 							ng-model="currentlyEditingFilter"
 							ng-change="iframeScope.loadEditingList()"/>
 					</div>
-					<div class="oxygen-select-box-option" title="<?php _e("Edit", "oxygen"); ?>"
+					<div class="oxygen-select-box-option" title="<?php oxygen_translate_echo("Edit", "oxygen"); ?>"
 						ng-repeat="post in iframeScope.editingList"
 						ng-click="iframeScope.changePreview(post);">
 						{{post.post_title}}<span>{{post.type}}</span>
@@ -316,7 +316,7 @@ function ct_template_builder_settings() {
 	<div class='oxygen-control-wrapper'
 		ng-show="iframeScope.ajaxVar.oxyTemplate && !iframeScope.ajaxVar.oxyReusable">
 		<div class='oxygen-control oxygen-template-previewing-control'>
-			<label class='oxygen-control-label'><?php _e("Previewing","oxygen"); ?></label>
+			<label class='oxygen-control-label'><?php oxygen_translate_echo("Previewing","oxygen"); ?></label>
 			<div class="oxygen-select oxygen-select-box-wrapper">
 				<div class="oxygen-select-box">
 					<div class="oxygen-select-box-current" title="{{iframeScope.previewType == 'post' ? iframeScope.template.postData.post_title : iframeScope.template.postData.term_name}}">{{iframeScope.previewType == 'post' ? iframeScope.template.postData.post_title : iframeScope.template.postData.term_name}}</div>
@@ -324,21 +324,21 @@ function ct_template_builder_settings() {
 				</div>
 				<div class="oxygen-select-box-options">
 					<div class="oxygen-select-box-option">
-						<input ng-model="postsFilter" type="text" value="" placeholder="<?php _e("Filter...", "oxygen"); ?>" spellcheck="false"/>
+						<input ng-model="postsFilter" type="text" value="" placeholder="<?php oxygen_translate_echo("Filter...", "oxygen"); ?>" spellcheck="false"/>
 					</div>
-					<div class="oxygen-select-box-option" title="<?php _e("Preview this post", "oxygen"); ?>"
+					<div class="oxygen-select-box-option" title="<?php oxygen_translate_echo("Preview this post", "oxygen"); ?>"
 						ng-repeat="post in iframeScope.template.postsList | filter:postsFilter | limitTo:20"
 						ng-click="iframeScope.loadTemplatesTerm(post.id, 'post');">
 						{{post.title}}
 					</div>
-					<div class="oxygen-select-box-option" title="<?php _e("Preview this post", "oxygen"); ?>"
+					<div class="oxygen-select-box-option" title="<?php oxygen_translate_echo("Preview this post", "oxygen"); ?>"
 						ng-repeat="term in iframeScope.template.termsList | filter:postsFilter | limitTo:20"
 						ng-click="iframeScope.loadTemplatesTerm(term.id, 'term');">
 						{{term.title}}
 					</div>
 					<div class="oxygen-select-box-option oxygen-nothing-found-option"
 						ng-show="!iframeScope.template.termsList.length && !iframeScope.template.postsList.length">
-						<?php _e("No items to preview"); ?>
+						<?php oxygen_translate_echo("No items to preview"); ?>
 					</div>
 				</div>
 			</div>
@@ -367,7 +367,7 @@ function ct_get_inner_content_template() {
 	$args = array(
 		'posts_per_page'	=> -1,
 		'orderby' 			=> 'meta_value_num',
-		'meta_key'			=> 'ct_template_order',
+		'meta_key'			=> '_ct_template_order',
 		'order' 			=> 'DESC',
 		'post_type' 		=> 'ct_template',
 		'post_status' 		=> 'publish'
@@ -378,7 +378,7 @@ function ct_get_inner_content_template() {
 	foreach ( $templates->posts as $template ) {
 
 		// check if all posts applies
-		$applies = get_post_meta( $template->ID, 'ct_template_inner_content', true );
+		$applies = oxy_get_post_meta( $template->ID, 'ct_template_inner_content', true );
 
 		if($applies) {
 			return $template;
@@ -404,7 +404,7 @@ function ct_get_posts_template( $post_id ) {
 	$args = array(
 		'posts_per_page'	=> -1,
 		'orderby' 			=> 'meta_value_num',
-		'meta_key'			=> 'ct_template_order',
+		'meta_key'			=> '_ct_template_order',
 		'order' 			=> 'DESC',
 		'post_type' 		=> 'ct_template',
 		'post_status' 		=> 'publish',
@@ -420,14 +420,14 @@ function ct_get_posts_template( $post_id ) {
 
 	foreach ( $templates->posts as $template ) {
 		// ignore type inner_content
-		$template_inner_content = get_post_meta($template->ID, 'ct_template_inner_content', true);
+		$template_inner_content = oxy_get_post_meta($template->ID, 'ct_template_inner_content', true);
 		if($template_inner_content) {				
 			continue;
 		}
 
 
 		// check if all posts applies
-		$all_posts = get_post_meta( $template->ID, 'ct_template_single_all', true );
+		$all_posts = oxy_get_post_meta( $template->ID, 'ct_template_single_all', true );
 		
 		if ( $all_posts ) {
 			return $template;
@@ -435,19 +435,19 @@ function ct_get_posts_template( $post_id ) {
 		else {
 
 			// get post types
-			$post_types = get_post_meta( $template->ID, 'ct_template_post_types', true );
+			$post_types = oxy_get_post_meta( $template->ID, 'ct_template_post_types', true );
 
 			// check if current post type is added for template
 			if ( is_array( $post_types ) && in_array( $current_post_type, $post_types ) ) {
 
 				$match = true;
 				// taxonomies
-				$use_taxonomies = get_post_meta( $template->ID, 'ct_use_template_taxonomies', true );
-				$if_parent_among = get_post_meta( $template->ID, 'ct_template_apply_if_post_of_parents', true );
+				$use_taxonomies = oxy_get_post_meta( $template->ID, 'ct_use_template_taxonomies', true );
+				$if_parent_among = oxy_get_post_meta( $template->ID, 'ct_template_apply_if_post_of_parents', true );
 				
 				if ( $use_taxonomies ) {	
 
-					$template_taxonomies = get_post_meta( $template->ID, 'ct_template_taxonomies', true );
+					$template_taxonomies = oxy_get_post_meta( $template->ID, 'ct_template_taxonomies', true );
 
 					if ( $template_taxonomies ) {
 
@@ -474,7 +474,7 @@ function ct_get_posts_template( $post_id ) {
 
 				if ( $if_parent_among ) {	
 
-					$parents = get_post_meta( $template->ID, 'ct_template_post_of_parents', true );
+					$parents = oxy_get_post_meta( $template->ID, 'ct_template_post_of_parents', true );
 					$parent_id = wp_get_post_parent_id( $post_id );
 
 					if(!in_array($parent_id, $parents)) {
@@ -494,12 +494,12 @@ function ct_get_posts_template( $post_id ) {
 		'posts_per_page'	=> -1,
 		'order' 			=> 'DESC',
 		'orderby'    		=> 'meta_value_num',
-		'meta_key' 			=> 'ct_template_order',
+		'meta_key' 			=> '_ct_template_order',
 		'post_type' 		=> 'ct_template',
 		'post_status' 		=> 'publish',
 		'meta_query' => array(
 			array(
-				'key'     => 'ct_template_index',
+				'key'     => '_ct_template_index',
 				'value'   => 'true',
 			),
 		),
@@ -508,7 +508,7 @@ function ct_get_posts_template( $post_id ) {
 	$templates = new WP_Query( $args );
 
 	foreach ( $templates->posts as $template ) {
-		if ( get_post_meta( $template->ID, 'ct_template_index', true ) ) {
+		if ( oxy_get_post_meta( $template->ID, 'ct_template_index', true ) ) {
 			return $template;
 		}
 	}
@@ -530,7 +530,7 @@ function ct_get_archives_template( $post_id = false) {
 		'posts_per_page'	=> -1,
 		'order' 			=> 'DESC',
 		'orderby'    		=> 'meta_value_num',
-		'meta_key' 			=> 'ct_template_order',
+		'meta_key' 			=> '_ct_template_order',
 		'post_type' 		=> 'ct_template',
 		'post_status' 		=> 'publish',
 		// 'meta_query' => array(
@@ -551,33 +551,33 @@ function ct_get_archives_template( $post_id = false) {
 		
 		// ignore type inner_content 
 		
-		$template_inner_content = get_post_meta($template->ID, 'ct_template_inner_content', true);
+		$template_inner_content = oxy_get_post_meta($template->ID, 'ct_template_inner_content', true);
 		if($template_inner_content) {
 			continue;
 		}
 		
 
 		// 404
-		if ( is_404() && get_post_meta( $template->ID, 'ct_template_404_page', true ) ) {
+		if ( is_404() && oxy_get_post_meta( $template->ID, 'ct_template_404_page', true ) ) {
 			return $template;
 		}
 
 		// Check what is the current archive
 		// Post types
 
-		$applies_to_all_archives = get_post_meta( $template->ID, 'ct_template_all_archives', true );
+		$applies_to_all_archives = oxy_get_post_meta( $template->ID, 'ct_template_all_archives', true );
 		
 		if($applies_to_all_archives && !$is_front_page) {
 			return $template;
 		}
 
-		$applies_to_post_types = get_post_meta( $template->ID, 'ct_template_apply_if_archive_among_cpt', true );
+		$applies_to_post_types = oxy_get_post_meta( $template->ID, 'ct_template_apply_if_archive_among_cpt', true );
 
 		if ( $applies_to_post_types && is_post_type_archive() ) {
 			
 			// check specific post type
 			$queried_object = get_queried_object();
-			$post_types = get_post_meta( $template->ID, 'ct_template_archive_post_types', true );
+			$post_types = oxy_get_post_meta( $template->ID, 'ct_template_archive_post_types', true );
 
 			if ( is_array( $post_types ) && (in_array('all_posttypes', $post_types) || (isset($queried_object->name) && in_array( $queried_object->name, $post_types )) )) {
 				return $template;
@@ -585,9 +585,9 @@ function ct_get_archives_template( $post_id = false) {
 			
 		}
 
-		$applies_to_taxonomies = get_post_meta( $template->ID, 'ct_template_apply_if_archive_among_taxonomies', true );
+		$applies_to_taxonomies = oxy_get_post_meta( $template->ID, 'ct_template_apply_if_archive_among_taxonomies', true );
 		if($applies_to_taxonomies) {
-			$taxonomies = get_post_meta( $template->ID, 'ct_template_archive_among_taxonomies', true );
+			$taxonomies = oxy_get_post_meta( $template->ID, 'ct_template_archive_among_taxonomies', true );
 			// Categories
 			if ( is_category() ) {
 
@@ -624,13 +624,13 @@ function ct_get_archives_template( $post_id = false) {
 			}
 		}
 
-		$applies_to_authors = get_post_meta( $template->ID, 'ct_template_apply_if_archive_among_authors', true );
+		$applies_to_authors = oxy_get_post_meta( $template->ID, 'ct_template_apply_if_archive_among_authors', true );
 		// Author archive
 		if ( $applies_to_authors && is_author() ) {
 
 			// check specific post type
 			$author 	= get_the_author_meta('ID');
-			$authors 	= get_post_meta( $template->ID, 'ct_template_authors_archives', true );
+			$authors 	= oxy_get_post_meta( $template->ID, 'ct_template_authors_archives', true );
 
 			if ( is_array( $authors ) && (in_array('all_authors', $authors) || in_array( $author, $authors )) ) {
 				return $template;
@@ -639,31 +639,31 @@ function ct_get_archives_template( $post_id = false) {
 
 		// Front Page
 		
-		if ( $is_front_page && get_post_meta( $template->ID, 'ct_template_front_page', true ) ) {
+		if ( $is_front_page && oxy_get_post_meta( $template->ID, 'ct_template_front_page', true ) ) {
 			return $template;
 		}	
 
 		// Blog Posts
 		// backend
 		if ( $post_id ) {
-			if ( get_option( 'page_for_posts' ) == $post_id && get_post_meta( $template->ID, 'ct_template_blog_posts', true ) ) {
+			if ( get_option( 'page_for_posts' ) == $post_id && oxy_get_post_meta( $template->ID, 'ct_template_blog_posts', true ) ) {
 				return $template;
 			}	
 		}
 		// frontend
 		else {
-			if ( is_home() && get_post_meta( $template->ID, 'ct_template_blog_posts', true ) ) {
+			if ( is_home() && oxy_get_post_meta( $template->ID, 'ct_template_blog_posts', true ) ) {
 				return $template;
 			}
 		}
 
 		// Date
-		if ( is_date() && get_post_meta( $template->ID, 'ct_template_date_archive', true ) ) {
+		if ( is_date() && oxy_get_post_meta( $template->ID, 'ct_template_date_archive', true ) ) {
 			return $template;
 		}
 
 		// Search
-		if ( is_search() && get_post_meta( $template->ID, 'ct_template_search_page', true ) ) {
+		if ( is_search() && oxy_get_post_meta( $template->ID, 'ct_template_search_page', true ) ) {
 			return $template;
 		}
 
@@ -675,12 +675,12 @@ function ct_get_archives_template( $post_id = false) {
 		'posts_per_page'	=> -1,
 		'order' 			=> 'DESC',
 		'orderby'    		=> 'meta_value_num',
-		'meta_key' 			=> 'ct_template_order',
+		'meta_key' 			=> '_ct_template_order',
 		'post_type' 		=> 'ct_template',
 		'post_status' 		=> 'publish',
 		'meta_query' => array(
 			array(
-				'key'     => 'ct_template_index',
+				'key'     => '_ct_template_index',
 				'value'   => 'true',
 			),
 		),
@@ -689,7 +689,7 @@ function ct_get_archives_template( $post_id = false) {
 	$templates = new WP_Query( $args );
 
 	foreach ( $templates->posts as $template ) {
-		if ( get_post_meta( $template->ID, 'ct_template_index', true ) ) {
+		if ( oxy_get_post_meta( $template->ID, 'ct_template_index', true ) ) {
 			return $template;
 		}
 	}
@@ -743,9 +743,9 @@ function ct_get_templates_post( $template_id, $current_post_id = false, $option 
 		 * Get all template's meta
 		 */
 		
-		$all_posts = get_post_meta( $template_id, 'ct_template_single_all', true );
+		$all_posts = oxy_get_post_meta( $template_id, 'ct_template_single_all', true );
 
-		$is_catch_all = $catch_all || get_post_meta( $template_id, 'ct_template_index', true ) || get_post_meta($template_id, 'ct_template_inner_content', true);
+		$is_catch_all = $catch_all || oxy_get_post_meta( $template_id, 'ct_template_index', true ) || oxy_get_post_meta($template_id, 'ct_template_inner_content', true);
 
 		if ( $all_posts ||  $is_catch_all) {
 			
@@ -770,7 +770,7 @@ function ct_get_templates_post( $template_id, $current_post_id = false, $option 
 		else {
 
 			// Post types
-			$post_types = get_post_meta( $template_id, 'ct_template_post_types', true );
+			$post_types = oxy_get_post_meta( $template_id, 'ct_template_post_types', true );
 
 			// don't query if there is no posts
 			if ( !$post_types ) {
@@ -788,7 +788,7 @@ function ct_get_templates_post( $template_id, $current_post_id = false, $option 
 			$args['post_status'] 	= $post_status;
 
 			// Exclude IDs
-			$exclude_ids = get_post_meta( $template_id, 'ct_template_exclude_ids', true );
+			$exclude_ids = oxy_get_post_meta( $template_id, 'ct_template_exclude_ids', true );
 			$exclude_ids = explode(",", $exclude_ids);
 
 			// add to args
@@ -797,10 +797,10 @@ function ct_get_templates_post( $template_id, $current_post_id = false, $option 
 			}
 
 			// taxonomies
-			$use_taxonomies = get_post_meta( $template_id, 'ct_use_template_taxonomies', true );
+			$use_taxonomies = oxy_get_post_meta( $template_id, 'ct_use_template_taxonomies', true );
 			if ( $use_taxonomies ) {	
 
-				$template_taxonomies = get_post_meta( $template_id, 'ct_template_taxonomies', true );
+				$template_taxonomies = oxy_get_post_meta( $template_id, 'ct_template_taxonomies', true );
 
 				if ( $template_taxonomies ) {
 					
@@ -825,11 +825,11 @@ function ct_get_templates_post( $template_id, $current_post_id = false, $option 
 				
 			}
 
-			$if_parent_among = get_post_meta( $template_id, 'ct_template_apply_if_post_of_parents', true );
+			$if_parent_among = oxy_get_post_meta( $template_id, 'ct_template_apply_if_post_of_parents', true );
 			
 			if ( $if_parent_among ) {	
 
-				$parents = get_post_meta( $template_id, 'ct_template_post_of_parents', true );
+				$parents = oxy_get_post_meta( $template_id, 'ct_template_post_of_parents', true );
 				
 				if(is_array($parents)) {
 					$args['post_parent__in'] = $parents;
@@ -967,8 +967,8 @@ function ct_get_templates_term( $template_id, $term_id = false, $option = false,
 		$count = 0;
 		// get all saved terms
 		// post types
-		$all_archives = get_post_meta( $template_id, 'ct_template_all_archives', true );
-		$is_catch_all = $catch_all || get_post_meta( $template_id, 'ct_template_index', true ) || get_post_meta($template_id, 'ct_template_inner_content', true);
+		$all_archives = oxy_get_post_meta( $template_id, 'ct_template_all_archives', true );
+		$is_catch_all = $catch_all || oxy_get_post_meta( $template_id, 'ct_template_index', true ) || oxy_get_post_meta($template_id, 'ct_template_inner_content', true);
 
 
 		$post_types = array();
@@ -1024,17 +1024,17 @@ function ct_get_templates_term( $template_id, $term_id = false, $option = false,
 
 			if(!$all_archives)	{
 				$taxonomies = array();	
-				$use_taxonomies = get_post_meta( $template_id, 'ct_template_apply_if_archive_among_taxonomies', true );
+				$use_taxonomies = oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_taxonomies', true );
 
 				if($use_taxonomies) {
-					$taxonomies = get_post_meta( $template_id, 'ct_template_archive_among_taxonomies', true );
+					$taxonomies = oxy_get_post_meta( $template_id, 'ct_template_archive_among_taxonomies', true );
 				}
 
 				$post_types = array();
-				$use_posttypes = get_post_meta( $template_id, 'ct_template_apply_if_archive_among_cpt', true );
+				$use_posttypes = oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_cpt', true );
 
 				if($use_posttypes) {
-					$post_types = get_post_meta( $template_id, 'ct_template_archive_post_types', true );
+					$post_types = oxy_get_post_meta( $template_id, 'ct_template_archive_post_types', true );
 
 					// if all post types, then gather all post types into the array
 					if((!$limit || $count < $limit) && in_array('all_posttypes', $post_types)) {
@@ -1058,11 +1058,11 @@ function ct_get_templates_term( $template_id, $term_id = false, $option = false,
 				}
 
 				$authors = array();
-				$use_authors = get_post_meta( $template_id, 'ct_template_apply_if_archive_among_authors', true );
+				$use_authors = oxy_get_post_meta( $template_id, 'ct_template_apply_if_archive_among_authors', true );
 
 				if($use_authors) {
 
-					$authors = get_post_meta( $template_id, 'ct_template_authors_archives', true );
+					$authors = oxy_get_post_meta( $template_id, 'ct_template_authors_archives', true );
 
 
 					if((!$limit || $count < $limit) && in_array('all_authors', $authors)) {
@@ -1087,22 +1087,22 @@ function ct_get_templates_term( $template_id, $term_id = false, $option = false,
 		// Other Archives
 		 
 	 	// index
-		$template_index 		= get_post_meta( $template_id, 'ct_template_index', true );
+		$template_index 		= oxy_get_post_meta( $template_id, 'ct_template_index', true );
 
 		// front page
-		$template_front_page 	= get_post_meta( $template_id, 'ct_template_front_page', true );
+		$template_front_page 	= oxy_get_post_meta( $template_id, 'ct_template_front_page', true );
 
 		// blog posts
-		$template_blog_posts 	= get_post_meta( $template_id, 'ct_template_blog_posts', true );
+		$template_blog_posts 	= oxy_get_post_meta( $template_id, 'ct_template_blog_posts', true );
 
 		// date archive
-		$template_date_archive 	= $all_archives || get_post_meta( $template_id, 'ct_template_date_archive', true );
+		$template_date_archive 	= $all_archives || oxy_get_post_meta( $template_id, 'ct_template_date_archive', true );
 
 		// search result
-		$template_search_page 	= get_post_meta( $template_id, 'ct_template_search_page', true );
+		$template_search_page 	= oxy_get_post_meta( $template_id, 'ct_template_search_page', true );
 
 		// 404 page
-		//$template_404_page 		= get_post_meta( $template_id, 'ct_template_404_page', true );
+		//$template_404_page 		= oxy_get_post_meta( $template_id, 'ct_template_404_page', true );
 
 
 		/**
@@ -1412,14 +1412,14 @@ function ct_add_term_posts( &$terms, $taxonomy_name, $term_ids = false ) {
 
 		if ( $taxonomy_name == "index" ) {
 			
-			$term_name 	= __("Index", "oxygen");
+			$term_name 	= oxygen_translate("Index", "oxygen");
 			$args 		= array();
 			$permalink 	= get_home_url(null, '/'); //????
 		}
 		
 		if ( $taxonomy_name == "date_archive" ) {
 			
-			$term_name 	= __("Date Archive", "oxygen") . date(" (Y/M)");
+			$term_name 	= oxygen_translate("Date Archive", "oxygen") . date(" (Y/M)");
 			$args 		= array();
 			$permalink 	= get_month_link("",""); // current year, current month
 		}
@@ -1428,7 +1428,7 @@ function ct_add_term_posts( &$terms, $taxonomy_name, $term_ids = false ) {
 
 			if ( get_option( 'page_on_front' ) ) {
 				
-				$term_name 	= __("Front Page", "oxygen");
+				$term_name 	= oxygen_translate("Front Page", "oxygen");
 				$args 		= array();
 				$permalink 	= get_permalink( get_option( 'page_on_front' ) );
 			}
@@ -1441,7 +1441,7 @@ function ct_add_term_posts( &$terms, $taxonomy_name, $term_ids = false ) {
 			
 			if ( get_option( 'page_for_posts' ) ) {
 
-				$term_name 	= __("Blog Posts", "oxygen");
+				$term_name 	= oxygen_translate("Blog Posts", "oxygen");
 				$args 		= array('post_type'=>'post'); // unless the post type is specified, it will also load component templates and any other custom post types
 				$permalink 	= get_page_link( get_option( 'page_for_posts' ) );
 			}
@@ -1452,14 +1452,14 @@ function ct_add_term_posts( &$terms, $taxonomy_name, $term_ids = false ) {
 
 		if ( $taxonomy_name == "search_page" ) {
 			
-			$term_name 	= __("Search Page", "oxygen");
+			$term_name 	= oxygen_translate("Search Page", "oxygen");
 			$args 		= array();
 			$permalink 	= get_search_link("post");
 		}
 
 		if ( $taxonomy_name == "404_page" ) {
 			
-			$term_name 	= __("404 Page", "oxygen");
+			$term_name 	= oxygen_translate("404 Page", "oxygen");
 			$args 		= array();
 			$permalink 	= get_home_url( null, "absoltely_incredible_not_possible_to_exist_in_real_world_url_that_will_always_output_404_error_page" );
 		}
@@ -1499,7 +1499,7 @@ function ct_filter_post_object( $post_object, $no_custom_view = false, $preview_
 	// get components tree based on shortcodes
 	/* New Way */
 	
-	$json = get_post_meta(  $post_object->ID, 'ct_builder_json', true );
+	$json = oxy_get_post_meta(  $post_object->ID, 'ct_builder_json', true );
 	$tree = json_decode($json, true);
 	
 	if ($tree) {
@@ -1510,7 +1510,7 @@ function ct_filter_post_object( $post_object, $no_custom_view = false, $preview_
 		$post_object->post_content = do_oxygen_elements($tree);
 	}
 	else {
-		$shortcodes = get_post_meta($post_object->ID, "ct_builder_shortcodes", true);
+		$shortcodes = oxy_get_post_meta($post_object->ID, "ct_builder_shortcodes", true);
 		$tree 		= parse_shortcodes($shortcodes);
 		$post_object->post_tree = $tree['content'];
 	}

@@ -61,6 +61,8 @@ function globalShortcutHandler(event) {
                 processed = true;
                 break;
             case 'c':
+                console.log($scope)
+                console.log($rootScope)
                 $rootScope.$broadcast('copyElement');
                 processed = true;
                 break;

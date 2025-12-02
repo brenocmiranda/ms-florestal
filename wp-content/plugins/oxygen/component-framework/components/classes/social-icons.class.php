@@ -124,9 +124,9 @@ Class Oxy_Social_Icons extends CT_Component {
 		         <title>rss</title>
 		         <path d="M4.259 23.467c-2.35 0-4.259 1.917-4.259 4.252 0 2.349 1.909 4.244 4.259 4.244 2.358 0 4.265-1.895 4.265-4.244-0-2.336-1.907-4.252-4.265-4.252zM0.005 10.873v6.133c3.993 0 7.749 1.562 10.577 4.391 2.825 2.822 4.384 6.595 4.384 10.603h6.16c-0-11.651-9.478-21.127-21.121-21.127zM0.012 0v6.136c14.243 0 25.836 11.604 25.836 25.864h6.152c0-17.64-14.352-32-31.988-32z"></path>
 		      </symbol>
-		      <symbol id="oxy-social-icons-icon-twitter" viewBox="0 0 32 32">
+		      <symbol id="oxy-social-icons-icon-twitter" viewBox="0 0 512 512">
 		         <title>twitter</title>
-		         <path d="M32 7.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z"></path>
+		         <path d="M389.2 48h70.6L305.6 224.2 487 464H345L233.7 318.6 106.5 464H35.8L200.7 275.5 26.8 48H172.4L272.9 180.9 389.2 48zM364.4 421.8h39.1L151.1 88h-42L364.4 421.8z"></path>
 		      </symbol>
 		      <symbol id="oxy-social-icons-icon-instagram" viewBox="0 0 32 32">
 		         <title>instagram</title>
@@ -154,10 +154,10 @@ Class Oxy_Social_Icons extends CT_Component {
 		         <title>youtube</title>
 		         <path d="M31.681 9.6c0 0-0.313-2.206-1.275-3.175-1.219-1.275-2.581-1.281-3.206-1.356-4.475-0.325-11.194-0.325-11.194-0.325h-0.012c0 0-6.719 0-11.194 0.325-0.625 0.075-1.987 0.081-3.206 1.356-0.963 0.969-1.269 3.175-1.269 3.175s-0.319 2.588-0.319 5.181v2.425c0 2.587 0.319 5.181 0.319 5.181s0.313 2.206 1.269 3.175c1.219 1.275 2.819 1.231 3.531 1.369 2.563 0.244 10.881 0.319 10.881 0.319s6.725-0.012 11.2-0.331c0.625-0.075 1.988-0.081 3.206-1.356 0.962-0.969 1.275-3.175 1.275-3.175s0.319-2.587 0.319-5.181v-2.425c-0.006-2.588-0.325-5.181-0.325-5.181zM12.694 20.15v-8.994l8.644 4.513-8.644 4.481z"></path>
 		      </symbol>
-		      <symbol id="oxy-social-icons-icon-twitter-blank" viewBox="0 0 32 32">
-		         <title>twitter</title>
-		         <path d="M32 7.075c-1.175 0.525-2.444 0.875-3.769 1.031 1.356-0.813 2.394-2.1 2.887-3.631-1.269 0.75-2.675 1.3-4.169 1.594-1.2-1.275-2.906-2.069-4.794-2.069-3.625 0-6.563 2.938-6.563 6.563 0 0.512 0.056 1.012 0.169 1.494-5.456-0.275-10.294-2.888-13.531-6.862-0.563 0.969-0.887 2.1-0.887 3.3 0 2.275 1.156 4.287 2.919 5.463-1.075-0.031-2.087-0.331-2.975-0.819 0 0.025 0 0.056 0 0.081 0 3.181 2.263 5.838 5.269 6.437-0.55 0.15-1.131 0.231-1.731 0.231-0.425 0-0.831-0.044-1.237-0.119 0.838 2.606 3.263 4.506 6.131 4.563-2.25 1.762-5.075 2.813-8.156 2.813-0.531 0-1.050-0.031-1.569-0.094 2.913 1.869 6.362 2.95 10.069 2.95 12.075 0 18.681-10.006 18.681-18.681 0-0.287-0.006-0.569-0.019-0.85 1.281-0.919 2.394-2.075 3.275-3.394z"></path>
-		      </symbol>
+		      <symbol id="oxy-social-icons-icon-twitter-blank" viewBox="0 0 448 512">
+				<title>twitter</title>
+				<path d="M64 32C28.7 32 0 60.7 0 96V416c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V96c0-35.3-28.7-64-64-64H64zm297.1 84L257.3 234.6 379.4 396H283.8L209 298.1 123.3 396H75.8l111-126.9L69.7 116h98l67.7 89.5L313.6 116h47.5zM323.3 367.6L153.4 142.9H125.1L296.9 367.6h26.3z"></path>
+			  </symbol>
 		      <symbol id="oxy-social-icons-icon-instagram-blank" viewBox="0 0 32 32">
 		         <title>instagram</title>
 		         <path d="M16 2.881c4.275 0 4.781 0.019 6.462 0.094 1.563 0.069 2.406 0.331 2.969 0.55 0.744 0.288 1.281 0.638 1.837 1.194 0.563 0.563 0.906 1.094 1.2 1.838 0.219 0.563 0.481 1.412 0.55 2.969 0.075 1.688 0.094 2.194 0.094 6.463s-0.019 4.781-0.094 6.463c-0.069 1.563-0.331 2.406-0.55 2.969-0.288 0.744-0.637 1.281-1.194 1.837-0.563 0.563-1.094 0.906-1.837 1.2-0.563 0.219-1.413 0.481-2.969 0.55-1.688 0.075-2.194 0.094-6.463 0.094s-4.781-0.019-6.463-0.094c-1.563-0.069-2.406-0.331-2.969-0.55-0.744-0.288-1.281-0.637-1.838-1.194-0.563-0.563-0.906-1.094-1.2-1.837-0.219-0.563-0.481-1.413-0.55-2.969-0.075-1.688-0.094-2.194-0.094-6.463s0.019-4.781 0.094-6.463c0.069-1.563 0.331-2.406 0.55-2.969 0.288-0.744 0.638-1.281 1.194-1.838 0.563-0.563 1.094-0.906 1.838-1.2 0.563-0.219 1.412-0.481 2.969-0.55 1.681-0.075 2.188-0.094 6.463-0.094zM16 0c-4.344 0-4.887 0.019-6.594 0.094-1.7 0.075-2.869 0.35-3.881 0.744-1.056 0.412-1.95 0.956-2.837 1.85-0.894 0.888-1.438 1.781-1.85 2.831-0.394 1.019-0.669 2.181-0.744 3.881-0.075 1.713-0.094 2.256-0.094 6.6s0.019 4.887 0.094 6.594c0.075 1.7 0.35 2.869 0.744 3.881 0.413 1.056 0.956 1.95 1.85 2.837 0.887 0.887 1.781 1.438 2.831 1.844 1.019 0.394 2.181 0.669 3.881 0.744 1.706 0.075 2.25 0.094 6.594 0.094s4.888-0.019 6.594-0.094c1.7-0.075 2.869-0.35 3.881-0.744 1.050-0.406 1.944-0.956 2.831-1.844s1.438-1.781 1.844-2.831c0.394-1.019 0.669-2.181 0.744-3.881 0.075-1.706 0.094-2.25 0.094-6.594s-0.019-4.887-0.094-6.594c-0.075-1.7-0.35-2.869-0.744-3.881-0.394-1.063-0.938-1.956-1.831-2.844-0.887-0.887-1.781-1.438-2.831-1.844-1.019-0.394-2.181-0.669-3.881-0.744-1.712-0.081-2.256-0.1-6.6-0.1v0z"></path>
@@ -284,116 +284,116 @@ Class Oxy_Social_Icons extends CT_Component {
 // Create instance
 global $oxygen_vsb_components;
 $oxygen_vsb_components['social_icons'] = new Oxy_Social_Icons( array( 
-			'name' 		=> __('Social Icons','oxygen'),
+			'name' 		=> oxygen_translate('Social Icons','oxygen'),
 			'tag' 		=> 'oxy_social_icons',
 			'params' 	=> array(
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("Facebook","oxygen"),
+					"heading" 		=> oxygen_translate("Facebook","oxygen"),
 					"param_name" 	=> "icon-facebook",
 					"value" 		=> "",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("Facebook Link Title","oxygen"),
+					"heading" 		=> oxygen_translate("Facebook Link Title","oxygen"),
 					"param_name" 	=> "title-facebook",
 					"value" 		=> "Visit our Facebook",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("Instagram","oxygen"),
+					"heading" 		=> oxygen_translate("Instagram","oxygen"),
 					"param_name" 	=> "icon-instagram",
 					"value" 		=> "",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("Instagram Link Title","oxygen"),
+					"heading" 		=> oxygen_translate("Instagram Link Title","oxygen"),
 					"param_name" 	=> "title-instagram",
 					"value" 		=> "Visit our Instagram",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("Twitter","oxygen"),
+					"heading" 		=> oxygen_translate("X Twitter","oxygen"),
 					"param_name" 	=> "icon-twitter",
 					"value" 		=> "",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("Twitter Link Title","oxygen"),
+					"heading" 		=> oxygen_translate("X Twitter Link Title","oxygen"),
 					"param_name" 	=> "title-twitter",
 					"value" 		=> "Visit our Twitter",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("LinkedIn","oxygen"),
+					"heading" 		=> oxygen_translate("LinkedIn","oxygen"),
 					"param_name" 	=> "icon-linkedin",
 					"value" 		=> "",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("LinkedIn Link Title","oxygen"),
+					"heading" 		=> oxygen_translate("LinkedIn Link Title","oxygen"),
 					"param_name" 	=> "title-linkedin",
 					"value" 		=> "Visit our LinkedIn",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("RSS","oxygen"),
+					"heading" 		=> oxygen_translate("RSS","oxygen"),
 					"param_name" 	=> "icon-rss",
 					"value" 		=> "",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("RSS Link Title","oxygen"),
+					"heading" 		=> oxygen_translate("RSS Link Title","oxygen"),
 					"param_name" 	=> "title-rss",
 					"value" 		=> "Visit our RSS feed",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("YouTube","oxygen"),
+					"heading" 		=> oxygen_translate("YouTube","oxygen"),
 					"param_name" 	=> "icon-youtube",
 					"value" 		=> "",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "textfield",
-					"heading" 		=> __("YouTube Link Title","oxygen"),
+					"heading" 		=> oxygen_translate("YouTube Link Title","oxygen"),
 					"param_name" 	=> "title-youtube",
 					"value" 		=> "Visit our YouTube channel",
 					"css" 			=> false,
 				),
 				array(
 					"type" 			=> "radio",
-					"heading" 		=> __("Link Target", "oxygen"),
+					"heading" 		=> oxygen_translate("Link Target", "oxygen"),
 					"param_name" 	=> "icon-link-target",
 					"value" 		=> array(
-										"_blank" 	=> __("New Tab", "oxygen"),
-										"_self"		=> __("Current Tab", "oxygen"),
+										"_blank" 	=> oxygen_translate("New Tab", "oxygen"),
+										"_self"		=> oxygen_translate("Current Tab", "oxygen"),
 									),
 					"css"			=> false,
 				),
 				array(
 					"type" 			=> "radio",
-					"heading" 		=> __("Layout", "oxygen"),
+					"heading" 		=> oxygen_translate("Layout", "oxygen"),
 					"param_name" 	=> "icon-layout",
 					"value" 		=> array(
-										"row" 		=> __("Row", "oxygen"),
-										"column"	=> __("Column", "oxygen"),
+										"row" 		=> oxygen_translate("Row", "oxygen"),
+										"column"	=> oxygen_translate("Column", "oxygen"),
 									),
 					"css"			=> false,
 				),
 				array(
 					"type" 			=> "slider-measurebox",
-					"heading" 		=> __("Icon Size","oxygen"),
+					"heading" 		=> oxygen_translate("Icon Size","oxygen"),
 					"param_name" 	=> "icon-size",
 					"value" 		=> "50",
 					"min"			=> "10",
@@ -403,7 +403,7 @@ $oxygen_vsb_components['social_icons'] = new Oxy_Social_Icons( array(
 				),
 				array(
 					"type" 			=> "slider-measurebox",
-					"heading" 		=> __("Space Between Icons","oxygen"),
+					"heading" 		=> oxygen_translate("Space Between Icons","oxygen"),
 					"param_name" 	=> "icon-space-between-icons",
 					"value" 		=> "10",
 					"min"			=> "0",
@@ -413,7 +413,7 @@ $oxygen_vsb_components['social_icons'] = new Oxy_Social_Icons( array(
 				),
 				array(
 					"type" 			=> "colorpicker",
-					"heading" 		=> __("Background Color", "oxygen"),
+					"heading" 		=> oxygen_translate("Background Color", "oxygen"),
 					"param_name" 	=> "icon-background-color",
 					"value" 		=> "",
 					"css" 			=> false,
@@ -421,7 +421,7 @@ $oxygen_vsb_components['social_icons'] = new Oxy_Social_Icons( array(
 				),
 				array(
 					"type" 			=> "colorpicker",
-					"heading" 		=> __("Icon Color", "oxygen"),
+					"heading" 		=> oxygen_translate("Icon Color", "oxygen"),
 					"param_name" 	=> "icon-color",
 					"value" 		=> "",
 					"css" 			=> false,
@@ -429,7 +429,7 @@ $oxygen_vsb_components['social_icons'] = new Oxy_Social_Icons( array(
 				),
 				array(
 					"type" 			=> "colorpicker",
-					"heading" 		=> __("Background Hover Color", "oxygen"),
+					"heading" 		=> oxygen_translate("Background Hover Color", "oxygen"),
 					"param_name" 	=> "icon-background-hover-color",
 					"value" 		=> "",
 					"css" 			=> false,
@@ -437,7 +437,7 @@ $oxygen_vsb_components['social_icons'] = new Oxy_Social_Icons( array(
 				),
 				array(
 					"type" 			=> "colorpicker",
-					"heading" 		=> __("Icon Hover Color", "oxygen"),
+					"heading" 		=> oxygen_translate("Icon Hover Color", "oxygen"),
 					"param_name" 	=> "icon-hover-color",
 					"value" 		=> "",
 					"css" 			=> false,
@@ -445,7 +445,7 @@ $oxygen_vsb_components['social_icons'] = new Oxy_Social_Icons( array(
 				),
 				array(
 					"type" 			=> "checkbox",
-					"heading" 		=> __("Use brand colors","oxygen"),
+					"heading" 		=> oxygen_translate("Use brand colors","oxygen"),
 					"param_name" 	=> "icon-use-brand-colors",
 					"value" 		=> "no",
 					"true_value" 	=> "yes",
@@ -454,12 +454,12 @@ $oxygen_vsb_components['social_icons'] = new Oxy_Social_Icons( array(
 				),
 				array(
 					"type" 			=> "radio",
-					"heading" 		=> __("Icon Style", "oxygen"),
+					"heading" 		=> oxygen_translate("Icon Style", "oxygen"),
 					"param_name" 	=> "icon-style",
 					"value" 		=> array(
-										"blank"		=> __("Blank", "oxygen"),
-										"circle" 	=> __("Circle", "oxygen"),
-										"square"	=> __("Square", "oxygen"),
+										"blank"		=> oxygen_translate("Blank", "oxygen"),
+										"circle" 	=> oxygen_translate("Circle", "oxygen"),
+										"square"	=> oxygen_translate("Square", "oxygen"),
 									),
 					"css"			=> false,
 				),

@@ -8,6 +8,7 @@
 class Oxygen_VSB_Dynamic_Shortcodes {
 
 	private $query;
+	private $custom_dynamic_datas = array();
 
 	function oxygen_vsb_add_shortcode() {
 		add_shortcode('oxygen', array($this, 'oxygen_vsb_dynamic_shortcode'));
@@ -209,7 +210,7 @@ class Oxygen_VSB_Dynamic_Shortcodes {
 
 		if($post) {
 			// we need to stop the first very iteration of the content, in case the content is a guttenberg layout, containing itself
-			$is_gutenberg = get_post_meta($post->ID, 'ct_oxygenberg_full_page_block', true);
+			$is_gutenberg = oxy_get_post_meta($post->ID, 'ct_oxygenberg_full_page_block', true);
 
 			if($is_gutenberg) {
 				return '';
@@ -321,7 +322,7 @@ class Oxygen_VSB_Dynamic_Shortcodes {
 	}
 
 	function oxygen_meta($atts) {
-		return get_post_meta(get_the_ID(), $atts['key'], true);
+		return oxy_get_post_meta(get_the_ID(), $atts['key'], true);
 	}
 
 	function oxygen_date($atts) {

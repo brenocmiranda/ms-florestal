@@ -1,4 +1,5 @@
-<div id="ct-sidepanel" class="ct-panel-elements-managers" ng-show="showSidePanel" ng-class="{'ct-sidepanel-show':showSidePanel}">
+<div id="ct-sidepanel" class="ct-panel-elements-managers" ng-show="showSidePanel" ng-class="{'ct-sidepanel-show':showSidePanel}"
+	ng-click="disableContentEdit()">
 	<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0; overflow: hidden;" version="1.1">
 		<defs>
 			<symbol id="oxy-icon-cross" viewBox="0 0 32 32">
@@ -11,7 +12,7 @@
 		
 		<div class="ct-tab-panel ct-dom-tree-tab ct-active" ng-show="isShowTab('sidePanel','DOMTree')">
 			<div class="oxygen-sidepanel-header-row">
-				<?php _e("Structure","oxygen"); ?>
+				<?php oxygen_translate_echo("Structure","oxygen"); ?>
 				<img class="oxygen-close-icon" ng-click="switchTab('sidePanel','DOMTree')" src="<?php echo CT_FW_URI; ?>/toolbar/UI/oxygen-icons/toolbar-icons/cross-icon.svg">
 			</div>
 
@@ -20,17 +21,17 @@
 				<div class="ct-elements-managers-top-item ct-button ct-butt-import"
 					ng-click="showImportModal()">
 					<img src="<?php echo CT_FW_URI; ?>/toolbar/UI/oxygen-icons/toolbar-icons/add.svg">
-					<?php _e("Import", "component-theme"); ?>
+					<?php oxygen_translate_echo("Import", "component-theme"); ?>
 				</div>
 				<div class="ct-elements-managers-top-item ct-button ct-butt-expand-all"
 					ng-click="$broadcast('treeExpand')">
 					<img src="<?php echo CT_FW_URI; ?>/toolbar/UI/oxygen-icons/toolbar-icons/expand.svg">
-					<?php _e("Expand All", "component-theme"); ?>
+					<?php oxygen_translate_echo("Expand All", "component-theme"); ?>
 				</div>
 				<div class="ct-elements-managers-top-item ct-button ct-butt-collapse-all"
 					ng-click="$broadcast('treeCollapse')">
 					<img src="<?php echo CT_FW_URI; ?>/toolbar/UI/oxygen-icons/toolbar-icons/collapse.svg">
-					<?php _e("Collapse All", "component-theme"); ?>
+					<?php oxygen_translate_echo("Collapse All", "component-theme"); ?>
 				</div>
 			</div>
 		
@@ -38,9 +39,12 @@
 				<div class="ct-expand-butt" ng-if="item.children.length" ng-click="state.collapsed = !state.collapsed" ng-class="{'expanded': !state.collapsed}"><span class="ct-icon"></span></div>
 				
 				<div class="dom-tree-node-label" 
+					oxy-right-click
+					component-id="{{item.id}}"
 					onclick="onLabelClick(event)"
 					ng-class="{'dom-tree-node-not-registered':iframeScope.getOption('not-registered', item.id)}" 
-					ng-click="iframeScope.activateComponent(item.id, item.name, $event); scrollToComponent(item.options.selector);">
+					ng-mousedown="iframeScope.activateComponent(item.id, item.name, $event); scrollToComponent(item.options.selector);"
+					ng-click="iframeScope.activateComponent(item.id, item.name, $event);">
 					
 					<?php if (oxygen_vsb_user_can_drag_n_drop()) : ?>
 					<span class="oxy-drag-handle">
@@ -72,6 +76,7 @@
 							class="ct-more-options-icon" />
 					
 						<img title="Remove Component" 
+							class="dom-tree-remove-icon"
 							<?php if (!oxygen_vsb_current_user_can_full_access()) : ?>
 							ng-if="iframeScope.isElementEnabledForUser(item.name)"
 							<?php endif; ?>
@@ -83,7 +88,7 @@
 						<div 
 							ng-show="iframeScope.isCanComponentize(item.id, item.name)" 
 							ng-click="copyElementExportJSON(item.id); state.showMoreOptions = false">
-							<span><?php _e("Export", "oxygen"); ?></span>
+							<span><?php oxygen_translate_echo("Export", "oxygen"); ?></span>
 						</div>
 						<div 
 							ng-show="iframeScope.isCanComponentize(item.id, item.name)" 
@@ -118,7 +123,7 @@
 				</div>
 				
 				<div class="sub-tree" ng-class="{'collapsed': state.collapsed}">
-					<div draggable="{{isDraggable(item.options.ct_parent)}}" 
+					<div draggable="{{isDraggable(item.options.ct_parent, item.id)}}" 
 						ng-include="'dom-tree-node'" 
 						ng-repeat="(key, item) in item.children" 
 						ng-init="state={collapsed: true, showMoreOptions: false, showCategorize: false, item: item, editable: false, depth: state.depth+1}"  
@@ -191,14 +196,14 @@
 
 		<div class="ct-tab-panel ct-history-tab ct-active" ng-show="isShowTab('sidePanel','History')">
 			<div class="oxygen-sidepanel-header-row">
-				<?php _e("History","oxygen"); ?>
+				<?php oxygen_translate_echo("History","oxygen"); ?>
 				<img class="oxygen-close-icon" ng-click="switchTab('sidePanel','History')" src="<?php echo CT_FW_URI; ?>/toolbar/UI/oxygen-icons/toolbar-icons/cross-icon.svg">
 			</div>
 
 			<div class="ct-elements-managers-top clearfix" ng-show="iframeScope.canUndo || iframeScope.canRedo">
 				<div class="ct-elements-managers-top-item ct-button"
 					ng-click="iframeScope.undoManager.clear()">
-					<?php _e("Clear All", "component-theme"); ?>
+					<?php oxygen_translate_echo("Clear All", "component-theme"); ?>
 				</div>
 			</div>
 			<div id="ct-history">
@@ -222,7 +227,7 @@
 		<div class="ct-tab-panel ct-style-sheets-tab ct-lock-panel-<?php echo get_option('ct_lock_stylesheets_in_builder') ? "true" : ""; ?>" ng-if="isShowTab('sidePanel','styleSheets')">
 
 			<div class="oxygen-sidepanel-header-row">
-				<?php _e("Stylesheets","oxygen"); ?>
+				<?php oxygen_translate_echo("Stylesheets","oxygen"); ?>
 				<img class="oxygen-close-icon" ng-click="switchTab('sidePanel','styleSheets')" src="<?php echo CT_FW_URI; ?>/toolbar/UI/oxygen-icons/toolbar-icons/cross-icon.svg">
 			</div>
 
@@ -231,7 +236,7 @@
 					<div class="ct-elements-managers-buttons">
 						<div class="ct-button ct-icon-right"
 							ng-click="iframeScope.addStyleSheet()">
-							<?php _e("Add Stylesheet", "component-theme"); ?>
+							<?php oxygen_translate_echo("Add Stylesheet", "component-theme"); ?>
 							<span class="ct-icon ct-plus-icon"></span>
 						</div>
 					</div>
@@ -240,7 +245,7 @@
 					<div class="ct-elements-managers-buttons">
 						<div class="ct-button ct-icon-right"
 							ng-click="iframeScope.addStyleSheet(true)">
-							<?php _e("Add Folder", "component-theme"); ?>
+							<?php oxygen_translate_echo("Add Folder", "component-theme"); ?>
 							<span class="ct-icon ct-plus-icon"></span>
 						</div>
 					</div>
@@ -259,13 +264,13 @@
         				</span>
 						<span class="ct-icon ct-cssjs-icon"
 							ng-click="iframeScope.setStyleSheetToEdit(stylesheet)"
-							title="<?php _e("Highlight selector", "component-theme"); ?>">
+							title="<?php oxygen_translate_echo("Highlight selector", "component-theme"); ?>">
 							</span>
 
 						<!-- <span class="ct-icon ct-copy-item-icon"></span> -->
 						<span class="ct-icon ct-delete-icon"
 							ng-click="iframeScope.deleteStyleSheet(stylesheet,$event)"
-							title="<?php _e("Delete stylesheet", "component-theme"); ?>">
+							title="<?php oxygen_translate_echo("Delete stylesheet", "component-theme"); ?>">
 							</span>
 						
 					</div>
@@ -283,7 +288,7 @@
 						<div ng-show="iframeScope.cssFolderMenuOpen == folder.id" class="ct-css-folder-menu">
 							<ul>
 								<li ng-click='iframeScope.toggleCSSFolder(folder)'>{{folder.status === 1 ? 'Disable': 'Enable' }}</li>
-								<li ng-click="iframeScope.deleteStyleSheet(folder,$event)"><?php _e("Delete Folder", "component-theme"); ?></li>
+								<li ng-click="iframeScope.deleteStyleSheet(folder,$event)"><?php oxygen_translate_echo("Delete Folder", "component-theme"); ?></li>
 							</ul>	
 						</div>
 					</div>
@@ -398,7 +403,7 @@
 
 		<div class="ct-tab-panel ct-selectors-tab" ng-if="isShowTab('sidePanel','selectors')">
 			<div class="oxygen-sidepanel-header-row">
-				<?php _e("Selectors","oxygen"); ?>
+				<?php oxygen_translate_echo("Selectors","oxygen"); ?>
 				<img class="oxygen-close-icon" ng-click="switchTab('sidePanel','selectors')" src="<?php echo CT_FW_URI; ?>/toolbar/UI/oxygen-icons/toolbar-icons/cross-icon.svg">
 			</div>
 			<div class="oxygen-add-searchbar-wrapper">
@@ -421,7 +426,7 @@
 					<div class="ct-elements-managers-buttons">
 						<div class="ct-button ct-icon-right"
 							ng-click="iframeScope.addSelectorItem()">
-							<?php _e("Add Selector", "component-theme"); ?>
+							<?php oxygen_translate_echo("Add Selector", "component-theme"); ?>
 							<span class="ct-icon ct-plus-icon"></span>
 						</div>
 					</div>
@@ -430,7 +435,7 @@
 					<div class="ct-elements-managers-buttons">
 						<div class="ct-button ct-icon-right"
 							ng-click="iframeScope.addSelectorFolder()">
-							<?php _e("Add Folder", "component-theme"); ?>
+							<?php oxygen_translate_echo("Add Folder", "component-theme"); ?>
 							<span class="ct-icon ct-plus-icon"></span>
 						</div>
 					</div>
@@ -449,7 +454,7 @@
 						<div ng-show="iframeScope.selectorFolderMenuOpen == folder.key" class="ct-css-folder-menu">
 							<ul>
 								<li ng-click='iframeScope.toggleSelectorFolder(folder); iframeScope.selectorFolderMenuOpen = false; iframeScope.classesCached = false; iframeScope.outputCSSOptions()'>{{folder.status === 1 ? 'Disable': 'Enable' }}</li>
-								<li ng-click="iframeScope.deleteSelectorFolder(folder.key,$event); iframeScope.selectorFolderMenuOpen = false"><?php _e("Delete Folder", "component-theme"); ?></li>
+								<li ng-click="iframeScope.deleteSelectorFolder(folder.key,$event); iframeScope.selectorFolderMenuOpen = false"><?php oxygen_translate_echo("Delete Folder", "component-theme"); ?></li>
 							</ul>	
 						</div>
 					</script>
@@ -506,11 +511,11 @@
 			<div class="ct-node-options">
 				<span class="ct-icon ct-visible-icon"
 					ng-click="iframeScope.highlightSelector(true,'.'+class.key,$event)"
-					title="<?php _e("Highlight selector", "component-theme"); ?>">
+					title="<?php oxygen_translate_echo("Highlight selector", "component-theme"); ?>">
 					</span>
 				<!-- <span class="ct-icon ct-copy-item-icon"></span> -->
 				<span class="ct-icon ct-delete-icon"
-					title="<?php _e("Delete class and all references", "component-theme"); ?>"
+					title="<?php oxygen_translate_echo("Delete class and all references", "component-theme"); ?>"
 					ng-click="iframeScope.tryDeleteClass(class.key,$event)"></span>
 			</div>
 		</div>
@@ -543,11 +548,11 @@
 				<div class="ct-node-options">
 					<span class="ct-icon ct-visible-icon"
 						ng-click="iframeScope.highlightSelector(true,'.'+class.key,$event)"
-						title="<?php _e("Highlight selector", "component-theme"); ?>">
+						title="<?php oxygen_translate_echo("Highlight selector", "component-theme"); ?>">
 						</span>
 					<!-- <span class="ct-icon ct-copy-item-icon"></span> -->
 					<span class="ct-icon ct-delete-icon"
-						title="<?php _e("Delete class and all references", "component-theme"); ?>"
+						title="<?php oxygen_translate_echo("Delete class and all references", "component-theme"); ?>"
 						ng-click="iframeScope.tryDeleteClass(class.key,$event)"></span>
 				</div>
 			</div>
@@ -564,10 +569,10 @@
 		<div class="ct-node-options">
 			<span class="ct-icon ct-visible-icon"
 				ng-click="iframeScope.highlightSelector(true,'.'+class.key,$event)"
-				title="<?php _e("Highlight selector", "component-theme"); ?>">
+				title="<?php oxygen_translate_echo("Highlight selector", "component-theme"); ?>">
 			</span>
 			<span class="ct-icon ct-delete-icon"
-				title="<?php _e("Delete class and all references", "component-theme"); ?>"
+				title="<?php oxygen_translate_echo("Delete class and all references", "component-theme"); ?>"
 				ng-click="iframeScope.tryDeleteClass(class.key,$event)">
 			</span>
 		</div>
@@ -624,11 +629,11 @@
 			<div class="ct-node-options">
 				<span class="ct-icon ct-visible-icon"
 					ng-click="iframeScope.highlightSelector(true,'.'+class.key,$event)"
-					title="<?php _e("Highlight selector", "component-theme"); ?>">
+					title="<?php oxygen_translate_echo("Highlight selector", "component-theme"); ?>">
 					</span>
 				<!-- <span class="ct-icon ct-copy-item-icon"></span> -->
 				<span class="ct-icon ct-delete-icon"
-					title="<?php _e("Delete class and all references", "component-theme"); ?>"
+					title="<?php oxygen_translate_echo("Delete class and all references", "component-theme"); ?>"
 					ng-click="iframeScope.tryDeleteClass(class.key,$event)"></span>
 			</div>
 		</div>
@@ -662,11 +667,11 @@
 				<div class="ct-node-options">
 					<span class="ct-icon ct-visible-icon"
 						ng-click="iframeScope.highlightSelector(true,'.'+class.key,$event)"
-						title="<?php _e("Highlight selector", "component-theme"); ?>">
+						title="<?php oxygen_translate_echo("Highlight selector", "component-theme"); ?>">
 						</span>
 					<!-- <span class="ct-icon ct-copy-item-icon"></span> -->
 					<span class="ct-icon ct-delete-icon"
-						title="<?php _e("Delete class and all references", "component-theme"); ?>"
+						title="<?php oxygen_translate_echo("Delete class and all references", "component-theme"); ?>"
 						ng-click="iframeScope.tryDeleteClass(class.key,$event)"></span>
 				</div>
 			</div>
@@ -683,10 +688,10 @@
 		<div class="ct-node-options">
 			<span class="ct-icon ct-visible-icon"
 				ng-click="iframeScope.highlightSelector(true,'.'+class.key,$event)"
-				title="<?php _e("Highlight selector", "component-theme"); ?>">
+				title="<?php oxygen_translate_echo("Highlight selector", "component-theme"); ?>">
 			</span>
 			<span class="ct-icon ct-delete-icon"
-				title="<?php _e("Delete class and all references", "component-theme"); ?>"
+				title="<?php oxygen_translate_echo("Delete class and all references", "component-theme"); ?>"
 				ng-click="iframeScope.tryDeleteClass(class.key,$event)">
 			</span>
 		</div>

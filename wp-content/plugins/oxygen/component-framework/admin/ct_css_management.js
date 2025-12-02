@@ -125,7 +125,8 @@ function ovsbCSS() {
 
             formData.append( 'action', 'oxy_save_css_from_admin' );
             formData.append( 'stylesheets', JSON.stringify( this.stylesheets ) );
-
+            formData.append( 'nonce', window.oxyNonceStylesheets );
+            
             fetch( ajaxurl, {
                 method: 'POST',
                 body: formData,

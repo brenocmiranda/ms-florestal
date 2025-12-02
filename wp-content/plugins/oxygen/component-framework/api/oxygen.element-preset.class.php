@@ -7,6 +7,7 @@
  * @author Ilya K.
  */
 
+ #[AllowDynamicProperties]
 Class OxygenElementPreset {
 
 	private $element_obj;

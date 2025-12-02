@@ -2280,7 +2280,7 @@ to accomodate it. flexbox is great */
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  margin-bottom: auto;
+  padding-bottom: 87px;
 }
 
 .oxy-code-editor-part {
@@ -2413,6 +2413,13 @@ to accomodate it. flexbox is great */
   margin: 0;
   display: block;
   min-height: 57px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 22px;
+}
+.oxy-stylsheets-toolbar-wrap .oxygen-control-row.oxygen-control-row-bottom-bar-code-editor {
+  right: 0;
 }
 .oxygen-control-row-bottom-bar-code-editor .oxygen-code-editor-apply, 
 .oxygen-code-editor-expand {
@@ -2420,12 +2427,6 @@ to accomodate it. flexbox is great */
 	padding: 7px 12px;
 	margin-left: 4px;
 	width: auto;
-}
-
-.oxygen-control-row.oxygen-control-row-bottom-bar-code-editor {
-	margin: 0;
-	display: block;
-	min-height: 57px;
 }
 
 .oxygen-codemirror-theme-chooser {
@@ -2461,6 +2462,11 @@ to accomodate it. flexbox is great */
   background: #e38a8a;
   color: #3c454c;
   padding: 4px;
+  position: absolute;
+  z-index: 99;
+  right: 16px;
+  left: 16px;
+  margin-top: -16px;
 }
 
 .oxygen-control-grid-cell {
@@ -2494,7 +2500,8 @@ to accomodate it. flexbox is great */
 }
 
 .oxygen-sidebar-stylesheet-editor-wrap {
-  height: calc(100vh - 264px);
+  height: calc(100vh - 154px);
+  overflow: auto;
 }
 
 /* Settings sidebar */
@@ -4653,6 +4660,10 @@ div.oxy-condition-menu h1.oxy-condition-menu-behavior {
   font-family: var(--oxy-ui-font-family);
 }
 
+div.oxy-condition-menu div.oxy-condition-menu-radios {
+  margin-bottom: 12px;
+}
+
 div.oxy-condition-menu div.oxy-condition-menu-radios label {
   cursor: pointer;
 }
@@ -5360,6 +5371,37 @@ i.ct-icon-if-conditions {
   border-radius: 2px;
   margin: 0px 2px;
   content: "[dynamic]";
+}
+
+#oxygen-context-menu {
+  top: -9999px;
+  left: -9999px;
+  position: fixed;
+  background-color: #2b2b2b;
+  border-radius: 6px;
+  box-shadow: 2px 2px #000;
+  color:#ffffff;
+  z-index: 2147483647;
+  overflow: hidden;
+}
+.oxy-hide-context-menu {
+  top: -9999px !important;
+  left: -9999px !important;
+}
+.oxy-context-menu-item {
+  padding: 6px 12px;
+  cursor: pointer;
+}
+.oxy-context-menu-item:hover {
+  background-color: #404040;
+}
+.oxy-context-menu-divider {
+  height: 1px;
+  min-height: 1px;
+  max-height: 1px;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-bottom: 12px;
 }
 
 /* Tippy JS animation */

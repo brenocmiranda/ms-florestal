@@ -18,12 +18,12 @@
 
 	ob_start();
 
-	$ct_render_post_using = get_post_meta( $post->ID, 'ct_render_post_using', true );
-	$ct_use_inner_content = get_post_meta( $post->ID, 'ct_use_inner_content', true );
+	$ct_render_post_using = oxy_get_post_meta( $post->ID, 'ct_render_post_using', true );
+	$ct_use_inner_content = oxy_get_post_meta( $post->ID, 'ct_use_inner_content', true );
 
-	$json = get_post_meta( $post->ID, 'ct_builder_json', true );
+	$json = oxy_get_post_meta( $post->ID, 'ct_builder_json', true );
 	$components_tree = json_decode($json, true);
-	$shortcodes = get_post_meta( $post->ID, 'ct_builder_shortcodes', true );
+	$shortcodes = oxy_get_post_meta( $post->ID, 'ct_builder_shortcodes', true );
 	
 	if ( (!$components_tree && !$shortcodes) || 
 			(
@@ -39,9 +39,9 @@
 		$template = ct_get_inner_content_template();
 
 		if($template) {
-			$json = get_post_meta( $template->ID, 'ct_builder_json', true );
+			$json = oxy_get_post_meta( $template->ID, 'ct_builder_json', true );
 			$components_tree = json_decode($json, true);
-			$shortcodes = get_post_meta($template->ID, 'ct_builder_shortcodes', true);
+			$shortcodes = oxy_get_post_meta($template->ID, 'ct_builder_shortcodes', true);
 		}
 
 		if ($components_tree) {
@@ -92,7 +92,7 @@
     	// obfuscate any oxy conditions, dynamic data
 	    $shortcodes = ct_obfuscate_shortcode($shortcodes);
 
-		if( class_exists('Oxygen_Gutenberg') && get_post_meta( $post->ID, 'ct_oxygenberg_full_page_block', true ) == '1' ) {
+		if( class_exists('Oxygen_Gutenberg') && oxy_get_post_meta( $post->ID, 'ct_oxygenberg_full_page_block', true ) == '1' ) {
 			$shortcodes = do_blocks( $post->post_content );
 		}
 

@@ -1,6 +1,106 @@
 
 CTFrontendBuilder.controller("ControllerConditions", function($scope, $parentScope, $timeout) {    
 
+    /**
+     * Get all the conditoins applied to element. Used in Copy/Paste
+     *
+     * @since 4.10
+     * @author Ilya K.
+     */
+
+    $scope.getGlobalConditions = function() {
+
+        var id = $scope.component.active.id;
+
+        return $scope.component.options[id]['model']['globalconditions'] || false;
+    }
+
+
+    /**
+     * Set the conditoins to element. Used in Copy/Paste
+     *
+     * @since 4.10
+     * @author Ilya K.
+     */
+
+    $scope.setGlobalConditions = function(conditions) {
+
+        // base 64 decode
+        conditions = atob(conditions);
+
+        // make sure JSON object is not broekn
+        try {
+            var conditionsObj = JSON.parse(conditions);
+        } catch (error) {
+            return false;
+        }
+
+        // check all fields are present
+        if (!conditionsObj.conditions) return false;
+        if (!conditionsObj.hash) return false;
+
+        // check hash
+        var hash = $scope.stringToHash(JSON.stringify(conditionsObj.conditions));
+        if (conditionsObj.hash !== hash) return false;
+
+        // all clear to update
+        $scope.setOptionModel('globalconditions', conditionsObj.conditions); 
+        $scope.setOptionModel('conditionstype', conditionsObj.conditionstype); 
+        $scope.setOptionModel('conditionspreview', conditionsObj.inEditorBehavior); 
+        $parentScope.evalGlobalConditions();
+
+        return true;
+    }
+
+
+    /**
+     * Copy current conditions to clipboard
+     *
+     * @since 4.10
+     * @author Ilya K.
+     */
+
+    $scope.copyConditions = function() {
+
+        var returnObj = {
+            conditions: $scope.getGlobalConditions(),
+            inEditorBehavior: $scope.getOption('conditionspreview'),
+            conditionstype: $scope.getOption('conditionstype'),
+            hash: $scope.stringToHash(JSON.stringify($scope.getGlobalConditions())),
+        };
+
+        // convert to JSON and base64 encode
+        var code = JSON.stringify(returnObj);
+        code = btoa(code);
+
+        $scope.copyToClipboard(code);
+        $scope.showNoticeModal("<div>Element Conditions copied to clipboard!</div>", "ct-notice");
+    }
+
+
+    /**
+     * Apply passed conditions
+     *
+     * @since 4.10
+     * @author Ilya K.
+     */
+
+    $scope.pasteConditions = function(conditions) {
+    
+        if(!conditions) {
+            return;
+        }
+
+        var result = $scope.setGlobalConditions(conditions)
+        if (result) {
+            $scope.showNoticeModal("<div>Element Conditions applied from your code!</div>", "ct-notice");
+        }
+        else {
+            $scope.showNoticeModal("<div>Element Conditions NOT applied. Code parsing issue.</div>");
+            console.log(conditions);
+        }
+    }
+
 
     /**
      * Moved logic from conditions.modal.view.php

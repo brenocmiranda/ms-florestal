@@ -158,7 +158,7 @@ Class OXY_VSB_Connection {
 
 		add_meta_box(
 			'ct_connection_metabox',
-			__( 'Oxygen - Design Set Options', 'component-theme' ),
+			oxygen_translate( 'Oxygen - Design Set Options', 'component-theme' ),
 			array($this, 'ct_connection_page_category_box_callback'),
 			array('page', 'ct_template', 'oxy_user_library'),
 			'normal',
@@ -177,10 +177,10 @@ Class OXY_VSB_Connection {
 
 		wp_nonce_field( 'ct_connection_metabox', 'ct_connection_metabox_nonce' );
 
-		$ct_connection_use_sections = get_post_meta($post->ID, '_ct_connection_use_sections', true);
-		$ct_connection_use_page = get_post_meta($post->ID, '_ct_connection_use_page', true);
-		$ct_connection_use_default = get_post_meta($post->ID, '_ct_connection_use_default', true);
-		$ct_connection_page_category = get_post_meta($post->ID, '_ct_connection_page_category', true);
+		$ct_connection_use_sections = oxy_get_post_meta($post->ID, '_ct_connection_use_sections', true);
+		$ct_connection_use_page = oxy_get_post_meta($post->ID, '_ct_connection_use_page', true);
+		$ct_connection_use_default = oxy_get_post_meta($post->ID, '_ct_connection_use_default', true);
+		$ct_connection_page_category = oxy_get_post_meta($post->ID, '_ct_connection_page_category', true);
 
 		$categories = array(
 			'home' => 'Home',
@@ -225,7 +225,7 @@ Class OXY_VSB_Connection {
 					<option value="">(none)</option>
 					<?php
 					
-					$category = get_post_meta($post->ID, '_ct_connection_page_category', true);
+					$category = oxy_get_post_meta($post->ID, '_ct_connection_page_category', true);
 					
 					foreach($categories as $val=>$label) {
 						?>
@@ -248,7 +248,7 @@ Class OXY_VSB_Connection {
 					<option value="">(none)</option>
 					<?php
 					
-					$category = get_post_meta($post->ID, '_ct_connection_page_category', true);
+					$category = oxy_get_post_meta($post->ID, '_ct_connection_page_category', true);
 					
 					global $ct_component_categories;
 
@@ -281,7 +281,7 @@ Class OXY_VSB_Connection {
 				</li>
 		<?php
 
-		$screenshots_generated = get_post_meta($post->ID, '_ct_connection_screenshots_generated', true);
+		$screenshots_generated = oxy_get_post_meta($post->ID, '_ct_connection_screenshots_generated', true);
 
 		if(!$screenshots_generated) {
 			?>
@@ -312,8 +312,8 @@ Class OXY_VSB_Connection {
 			</ul>
 		<?php
 		if($post->post_type == 'ct_template') {
-			$ct_connection_page_screenshot = get_post_meta($post->ID, '_ct_connection_page_screenshot', true);
-			$ct_connection_template_screenshot_url = get_post_meta($post->ID, '_ct_connection_template_screenshot_url', true);
+			$ct_connection_page_screenshot = oxy_get_post_meta($post->ID, '_ct_connection_page_screenshot', true);
+			$ct_connection_template_screenshot_url = oxy_get_post_meta($post->ID, '_ct_connection_template_screenshot_url', true);
 		?>
 			<div class="oxygen-metabox-screenshot-inputs">
 				<div class="oxygen-metabox-control-group">
@@ -326,12 +326,12 @@ Class OXY_VSB_Connection {
 		}
 
 		else {
-			$oxy_custom_screenshot = get_post_meta($post->ID, 'oxy_custom_screenshot', true);
+			$oxy_custom_screenshot = oxy_get_post_meta($post->ID, 'oxy_custom_screenshot', true);
 		?>
 			<div class="oxygen-metabox-screenshot-inputs">
 				<div class="oxygen-metabox-control-group">
 					<label for="ct_connection_template_screenshot_url">
-					<?php _e("Specify Your Custom Screenshot URL", "oxygen"); ?>
+					<?php oxygen_translate_echo("Specify Your Custom Screenshot URL", "oxygen"); ?>
 					<input type="text" name="oxy_custom_screenshot" class="oxygen-vsb-metabox-input" id="oxy_custom_screenshot" value="<?php echo esc_attr($oxy_custom_screenshot);?>" /></label>
 				</div>
 			</div>
@@ -380,7 +380,7 @@ Class OXY_VSB_Connection {
 		  $oxy_custom_screenshot = isset($_POST['oxy_custom_screenshot']) ? sanitize_text_field($_POST['oxy_custom_screenshot']): false;
 
 		  if($ct_connection_page_category) {
-			update_post_meta($post_id, '_ct_connection_page_category', $ct_connection_page_category); 
+			oxy_update_post_meta($post_id, '_ct_connection_page_category', $ct_connection_page_category); 
 		  }
 		  else {
 			delete_post_meta($post_id, '_ct_connection_page_category');
@@ -388,45 +388,45 @@ Class OXY_VSB_Connection {
 
 
 		  if($ct_connection_use_page) {
-			update_post_meta($post_id, '_ct_connection_use_page', $ct_connection_use_page); 
+			oxy_update_post_meta($post_id, '_ct_connection_use_page', $ct_connection_use_page); 
 		  }
 		  else {
 			delete_post_meta($post_id, '_ct_connection_use_page');
 		  }
 
 		  if($ct_connection_use_default) {
-			update_post_meta($post_id, '_ct_connection_use_default', $ct_connection_use_default); 
+			oxy_update_post_meta($post_id, '_ct_connection_use_default', $ct_connection_use_default); 
 		  }
 		  else {
 			delete_post_meta($post_id, '_ct_connection_use_default');
 		  }
 
 		  if($ct_connection_use_sections) {
-			update_post_meta($post_id, '_ct_connection_use_sections', $ct_connection_use_sections); 
+			oxy_update_post_meta($post_id, '_ct_connection_use_sections', $ct_connection_use_sections); 
 		  }
 		  else {
 			delete_post_meta($post_id, '_ct_connection_use_sections');
 		  }
 
 		  if($ct_connection_page_screenshot) {
-			update_post_meta($post_id, '_ct_connection_page_screenshot', $ct_connection_page_screenshot); 
+			oxy_update_post_meta($post_id, '_ct_connection_page_screenshot', $ct_connection_page_screenshot); 
 		  }
 		  else {
 			delete_post_meta($post_id, '_ct_connection_page_screenshot');
 		  }
 
 		  if($ct_connection_template_screenshot_url) {
-			update_post_meta($post_id, '_ct_connection_template_screenshot_url', $ct_connection_template_screenshot_url); 
+			oxy_update_post_meta($post_id, '_ct_connection_template_screenshot_url', $ct_connection_template_screenshot_url); 
 		  }
 		  else {
 			delete_post_meta($post_id, '_ct_connection_template_screenshot_url');
 		  }
 
 		  if($oxy_custom_screenshot) {
-			update_post_meta($post_id, 'oxy_custom_screenshot', $oxy_custom_screenshot); 
+			oxy_update_post_meta($post_id, 'oxy_custom_screenshot', $oxy_custom_screenshot); 
 		  }
 		  else {
-			delete_post_meta($post_id, 'oxy_custom_screenshot');
+			delete_post_meta($post_id, '_oxy_custom_screenshot');
 		  }
 
 	}
@@ -595,7 +595,7 @@ Class OXY_VSB_Connection {
 				<ul style=" list-style: initial; margin-left: 25px; margin-top: 11px;">
 					<li>Create elements at <a href="<?php echo get_admin_url().'edit.php?post_type=oxy_user_library';?>">Oxygen &gt; Block Library</a>.</li>
 					<li>Find your elements in Oxygen at <i>+Add &gt; Library &gt; Sandbox</i>.</li>
-					<li><a href="https://oxygenbuilder.com/documentation/design-library/user-design-library/" target="_blank">Watch the full tutorial with more details »</a></li>
+					<li><a href="https://classic.oxygenbuilder.com/documentation/design-library/user-design-library/" target="_blank">Watch the full tutorial with more details »</a></li>
 				</ul>
 			</div>
 
@@ -934,7 +934,7 @@ Class OXY_VSB_Connection {
 			
 			//$response['messages'][] = 'Processing '.($isTemplate?'Template':'Page').' with ID = '.$page->ID;
 			// get the shortcodes of the page
-			$shortcodes = get_post_meta($page->ID, 'ct_builder_shortcodes', true);
+			$shortcodes = oxy_get_post_meta($page->ID, 'ct_builder_shortcodes', true);
 
 			$shortcodes = parse_shortcodes($shortcodes, false);
 
@@ -1486,7 +1486,7 @@ Class OXY_VSB_Connection {
 
 		foreach ($templates as $template) {
 
-			$use_page_default = get_post_meta($template->ID, '_ct_connection_use_default', true);
+			$use_page_default = oxy_get_post_meta($template->ID, '_ct_connection_use_default', true);
 			
 			if(!$use_page_default) {
 				continue;
@@ -1495,7 +1495,7 @@ Class OXY_VSB_Connection {
 			$return_template['ID'] = $template->ID;
 			$return_template['post_title'] = $template->post_title;
 			
-			$return_template['builder_shortcodes'] = get_post_meta($template->ID, 'ct_builder_shortcodes', true);
+			$return_template['builder_shortcodes'] = oxy_get_post_meta($template->ID, 'ct_builder_shortcodes', true);
 
 			$shortcodes = parse_shortcodes($return_template['builder_shortcodes'], false);
 
@@ -1505,19 +1505,19 @@ Class OXY_VSB_Connection {
 				$return_template['builder_shortcodes'] = preg_replace_callback('/color\((\d*)\)/', array($this, 'oxygen_vsb_connection_global_color_match'), $return_template['builder_shortcodes']);
 			}
 
-			$return_template['template_type'] = get_post_meta($template->ID, 'ct_template_type', true);
+			$return_template['template_type'] = oxy_get_post_meta($template->ID, 'ct_template_type', true);
 			
-			$return_template['template_order'] = get_post_meta($template->ID, 'ct_template_order', true);
-			$return_template['parent_template'] = get_post_meta($template->ID, 'ct_parent_template', true);
+			$return_template['template_order'] = oxy_get_post_meta($template->ID, 'ct_template_order', true);
+			$return_template['parent_template'] = oxy_get_post_meta($template->ID, 'ct_parent_template', true);
 
-			$return_template['template_single_all'] = get_post_meta($template->ID, 'ct_template_single_all', true);
-			$return_template['template_post_types'] = get_post_meta($template->ID, 'ct_template_post_types', true);
-			$return_template['use_template_taxonomies'] = get_post_meta($template->ID, 'ct_use_template_taxonomies', true);
+			$return_template['template_single_all'] = oxy_get_post_meta($template->ID, 'ct_template_single_all', true);
+			$return_template['template_post_types'] = oxy_get_post_meta($template->ID, 'ct_template_post_types', true);
+			$return_template['use_template_taxonomies'] = oxy_get_post_meta($template->ID, 'ct_use_template_taxonomies', true);
 			
 			
 			// map slugs to ids
 			if($return_template['use_template_taxonomies']) {
-				$return_template['template_taxonomies'] = get_post_meta($template->ID, 'ct_template_taxonomies', true);
+				$return_template['template_taxonomies'] = oxy_get_post_meta($template->ID, 'ct_template_taxonomies', true);
 
 				foreach($return_template['template_taxonomies']['values'] as $key => $val) {
 					// get slug for the id
@@ -1529,13 +1529,13 @@ Class OXY_VSB_Connection {
 				}
 			}
 
-			$return_template['template_apply_if_post_of_parents'] = get_post_meta($template->ID, 'ct_template_apply_if_post_of_parents', true);
-			$return_template['template_post_of_parents'] = get_post_meta($template->ID, 'ct_template_post_of_parents', true);
-			$return_template['template_all_archives'] = get_post_meta($template->ID, 'ct_template_all_archives', true);
-			$return_template['template_apply_if_archive_among_taxonomies'] = get_post_meta($template->ID, 'ct_template_apply_if_archive_among_taxonomies', true);
+			$return_template['template_apply_if_post_of_parents'] = oxy_get_post_meta($template->ID, 'ct_template_apply_if_post_of_parents', true);
+			$return_template['template_post_of_parents'] = oxy_get_post_meta($template->ID, 'ct_template_post_of_parents', true);
+			$return_template['template_all_archives'] = oxy_get_post_meta($template->ID, 'ct_template_all_archives', true);
+			$return_template['template_apply_if_archive_among_taxonomies'] = oxy_get_post_meta($template->ID, 'ct_template_apply_if_archive_among_taxonomies', true);
 			
 			if($return_template['template_apply_if_archive_among_taxonomies']) {
-				$return_template['template_archive_among_taxonomies'] = get_post_meta($template->ID, 'ct_template_archive_among_taxonomies', true);
+				$return_template['template_archive_among_taxonomies'] = oxy_get_post_meta($template->ID, 'ct_template_archive_among_taxonomies', true);
 
 				foreach($return_template['template_archive_among_taxonomies'] as $key => $val) {
 					
@@ -1553,18 +1553,18 @@ Class OXY_VSB_Connection {
 				}
 			}
 			
-			$return_template['template_apply_if_archive_among_cpt'] = get_post_meta($template->ID, 'ct_template_apply_if_archive_among_cpt', true);
-			$return_template['template_archive_post_types'] = get_post_meta($template->ID, 'ct_template_archive_post_types', true);
-			// $return_template['template_apply_if_archive_among_authors'] = get_post_meta($template->ID, 'ct_template_apply_if_archive_among_authors', true);
-			// $return_template['template_authors_archives'] = get_post_meta($template->ID, 'ct_template_authors_archives', true);
-			$return_template['template_date_archive'] = get_post_meta($template->ID, 'ct_template_date_archive', true);
-			$return_template['template_front_page'] = get_post_meta($template->ID, 'ct_template_front_page', true);
-			$return_template['template_blog_posts'] = get_post_meta($template->ID, 'ct_template_blog_posts', true);
-			$return_template['template_search_page'] = get_post_meta($template->ID, 'ct_template_search_page', true);
-			$return_template['template_404_page'] = get_post_meta($template->ID, 'ct_template_404_page', true);
-			$return_template['template_index'] = get_post_meta($template->ID, 'ct_template_index', true);
+			$return_template['template_apply_if_archive_among_cpt'] = oxy_get_post_meta($template->ID, 'ct_template_apply_if_archive_among_cpt', true);
+			$return_template['template_archive_post_types'] = oxy_get_post_meta($template->ID, 'ct_template_archive_post_types', true);
+			// $return_template['template_apply_if_archive_among_authors'] = oxy_get_post_meta($template->ID, 'ct_template_apply_if_archive_among_authors', true);
+			// $return_template['template_authors_archives'] = oxy_get_post_meta($template->ID, 'ct_template_authors_archives', true);
+			$return_template['template_date_archive'] = oxy_get_post_meta($template->ID, 'ct_template_date_archive', true);
+			$return_template['template_front_page'] = oxy_get_post_meta($template->ID, 'ct_template_front_page', true);
+			$return_template['template_blog_posts'] = oxy_get_post_meta($template->ID, 'ct_template_blog_posts', true);
+			$return_template['template_search_page'] = oxy_get_post_meta($template->ID, 'ct_template_search_page', true);
+			$return_template['template_404_page'] = oxy_get_post_meta($template->ID, 'ct_template_404_page', true);
+			$return_template['template_index'] = oxy_get_post_meta($template->ID, 'ct_template_index', true);
 
-			$return_template['ct_template_inner_content'] = get_post_meta($template->ID, 'ct_template_inner_content', true);
+			$return_template['ct_template_inner_content'] = oxy_get_post_meta($template->ID, 'ct_template_inner_content', true);
 
 			$return_templates[] = $return_template;
 		}
@@ -1671,7 +1671,7 @@ Class OXY_VSB_Connection {
 		foreach($children as $key => $item) {
 
 			if($item['name'] == 'ct_reusable') {
-				$children[$key]['shortcodes'] = get_post_meta($item['options']['view_id'], 'ct_builder_shortcodes', true);
+				$children[$key]['shortcodes'] = oxy_get_post_meta($item['options']['view_id'], 'ct_builder_shortcodes', true);
 			}
 			if(isset($item['options']['view_id'])) {
 				$post = get_post($item['options']['view_id']);
@@ -1699,7 +1699,7 @@ Class OXY_VSB_Connection {
 		$id = intval($params['id']);
 		$page = intval($params['page']);
 		
-		$json = get_post_meta( $page, "ct_builder_json", true );
+		$json = oxy_get_post_meta( $page, "ct_builder_json", true );
 
 		if ($json) {
 			$json = json_decode( $json, true );
@@ -1707,7 +1707,7 @@ Class OXY_VSB_Connection {
 			$tree['content'] = $json['children'];
 		}
 		else {
-			$shortcodes = get_post_meta($page, 'ct_builder_shortcodes', true);
+			$shortcodes = oxy_get_post_meta($page, 'ct_builder_shortcodes', true);
 			$tree = parse_shortcodes($shortcodes, false);
 		}
 		
@@ -1873,7 +1873,7 @@ Class OXY_VSB_Connection {
 
 		$page = intval($params['id']);
 		
-		$json = get_post_meta( $page, "ct_builder_json", true );
+		$json = oxy_get_post_meta( $page, "ct_builder_json", true );
 
 		if ($json) {
 			$json = json_decode( $json, true );
@@ -1881,7 +1881,7 @@ Class OXY_VSB_Connection {
 			$tree['content'] = $json['children'];
 		}
 		else {
-			$shortcodes = get_post_meta($page, 'ct_builder_shortcodes', true);
+			$shortcodes = oxy_get_post_meta($page, 'ct_builder_shortcodes', true);
 			$tree = parse_shortcodes($shortcodes, false);
 		}
 
@@ -1941,7 +1941,7 @@ Class OXY_VSB_Connection {
 		$page = intval($params['page']);
 		
 		
-		$shortcodes = get_post_meta($page, 'ct_builder_shortcodes', true);
+		$shortcodes = oxy_get_post_meta($page, 'ct_builder_shortcodes', true);
 
 		$shortcodes = parse_shortcodes($shortcodes, false);
 
@@ -1989,12 +1989,12 @@ Class OXY_VSB_Connection {
 			$ct_preview_url = false;
 
 			if($page->post_type === 'ct_template') {
-				$ct_preview_url = get_post_meta($page->ID, 'ct_preview_url', true);
+				$ct_preview_url = oxy_get_post_meta($page->ID, 'ct_preview_url', true);
 			}
 
-			$screenshots = get_post_meta($page->ID, 'oxygen_vsb_components_screenshots', true);
+			$screenshots = oxy_get_post_meta($page->ID, 'oxygen_vsb_components_screenshots', true);
 			
-			$json = get_post_meta( $page->ID, "ct_builder_json", true );
+			$json = oxy_get_post_meta( $page->ID, "ct_builder_json", true );
 
 			if ($json) {
 				$json = json_decode( $json, true );
@@ -2004,7 +2004,7 @@ Class OXY_VSB_Connection {
 				$shortcodes = "shortcodes";
 			}
 			else {
-				$shortcodes = get_post_meta($page->ID, 'ct_builder_shortcodes', true);
+				$shortcodes = oxy_get_post_meta($page->ID, 'ct_builder_shortcodes', true);
 				$tree = parse_shortcodes($shortcodes, false);
 			}
 
@@ -2012,12 +2012,12 @@ Class OXY_VSB_Connection {
 				$getPages
 
 				// if it is set to be included as a whole page in the library
-				&& ($page->post_type != 'oxy_user_library' && get_post_meta($page->ID, '_ct_connection_use_page', true))
+				&& ($page->post_type != 'oxy_user_library' && oxy_get_post_meta($page->ID, '_ct_connection_use_page', true))
 				
 				// && avoid reusable parts
-				&& 'reusable_part' !== get_post_meta($page->ID, 'ct_template_type', true)) {
+				&& 'reusable_part' !== oxy_get_post_meta($page->ID, 'ct_template_type', true)) {
 
-				$providedScreenshot = $page->post_type == 'ct_template' ? get_post_meta($page->ID, '_ct_connection_page_screenshot', true) : false;
+				$providedScreenshot = $page->post_type == 'ct_template' ? oxy_get_post_meta($page->ID, '_ct_connection_page_screenshot', true) : false;
 
 				$returnPage = array(
 					'id' => $page->ID,
@@ -2028,9 +2028,9 @@ Class OXY_VSB_Connection {
 					'screenshot_url' => $providedScreenshot?$providedScreenshot:((is_array($screenshots) && isset($screenshots['page']))?$screenshots['page']:'http://via.placeholder.com/600x100?text=no+screenshot')
 				);
 
-				$returnPage['custom_screenshot'] = get_post_meta($page->ID, 'oxy_custom_screenshot', true);
+				$returnPage['custom_screenshot'] = oxy_get_post_meta($page->ID, 'oxy_custom_screenshot', true);
 
-				$page_category = get_post_meta($page->ID, '_ct_connection_page_category', true);
+				$page_category = oxy_get_post_meta($page->ID, '_ct_connection_page_category', true);
 				
 				if($page_category) {
 					$returnPage['category'] = $page_category;
@@ -2051,7 +2051,7 @@ Class OXY_VSB_Connection {
 			}
 			
 			// if it is not set to have its sections included in the library
-			if(!get_post_meta($page->ID, '_ct_connection_use_sections', true) && $page->post_type != 'oxy_user_library') {
+			if(!oxy_get_post_meta($page->ID, '_ct_connection_use_sections', true) && $page->post_type != 'oxy_user_library') {
 				continue;
 			}
 
@@ -2119,7 +2119,7 @@ Class OXY_VSB_Connection {
 		);
 
 		if($page->post_type == 'oxy_user_library') {
-			$page_category = get_post_meta($page->ID, '_ct_connection_page_category', true);
+			$page_category = oxy_get_post_meta($page->ID, '_ct_connection_page_category', true);
 
 			if($page_category) {
 				$section['category']  = $page_category;
@@ -2160,7 +2160,7 @@ Class OXY_VSB_Connection {
 		$section['url'] = $url;
 		if($page->post_type == 'oxy_user_library') {
 			$section['screenshot_url'] = (is_array($screenshots) && isset($screenshots['page']))?$screenshots['page']:'http://via.placeholder.com/600x100?text=no+screenshot';
-			$section['custom_screenshot'] = get_post_meta($page->ID, 'oxy_custom_screenshot', true);
+			$section['custom_screenshot'] = oxy_get_post_meta($page->ID, 'oxy_custom_screenshot', true);
 		}
 		else {
 			$section['screenshot_url'] = (is_array($screenshots) && isset($screenshots[$item['id']]))?$screenshots[$item['id']]:'http://via.placeholder.com/600x100?text=no+screenshot';
@@ -2181,7 +2181,7 @@ Class OXY_VSB_Connection {
 
 		$page = intval($params['id']);
 		
-		$shortcodes = get_post_meta($page, 'ct_builder_shortcodes', true);
+		$shortcodes = oxy_get_post_meta($page, 'ct_builder_shortcodes', true);
 
 		$shortcodes = parse_shortcodes($shortcodes, false);
 
@@ -2209,7 +2209,7 @@ Class OXY_VSB_Connection {
 
 		foreach ($pages as $page) {
 			
-			$use_page_default = get_post_meta($page->ID, '_ct_connection_use_default', true);
+			$use_page_default = oxy_get_post_meta($page->ID, '_ct_connection_use_default', true);
 			
 			if(!$use_page_default) {
 				continue;
@@ -2217,7 +2217,7 @@ Class OXY_VSB_Connection {
 
 			$return_page = json_decode(json_encode($page), true);
 
-			$return_page['builder_shortcodes'] = get_post_meta($page->ID, 'ct_builder_shortcodes', true);
+			$return_page['builder_shortcodes'] = oxy_get_post_meta($page->ID, 'ct_builder_shortcodes', true);
 
 			$shortcodes = parse_shortcodes($return_page['builder_shortcodes'], false);
 
@@ -2227,7 +2227,7 @@ Class OXY_VSB_Connection {
 				$return_page['builder_shortcodes'] = preg_replace_callback('/color\((\d*)\)/', array($this, 'oxygen_vsb_connection_global_color_match'), $return_page['builder_shortcodes']);
 			}
 
-			$return_page['other_template'] = get_post_meta($page->ID, 'ct_other_template', true);
+			$return_page['other_template'] = oxy_get_post_meta($page->ID, 'ct_other_template', true);
 
 			$return_pages[] = $return_page;
 
@@ -2333,10 +2333,10 @@ Class OXY_VSB_Connection {
 		$ct_preview_url = false;
 
 		if($post->post_type === 'ct_template') {
-			$ct_preview_url = get_post_meta($postId, 'ct_preview_url', true);
+			$ct_preview_url = oxy_get_post_meta($postId, 'ct_preview_url', true);
 		}
 
-		$shortcodes = get_post_meta($postId, 'ct_builder_shortcodes', true);
+		$shortcodes = oxy_get_post_meta($postId, 'ct_builder_shortcodes', true);
 		$shortcodes = parse_shortcodes($shortcodes);
 
 		if(is_array($shortcodes['content']) && $post->post_type !== 'oxy_user_library') {
@@ -2347,7 +2347,7 @@ Class OXY_VSB_Connection {
 				$screenshots = array();
 			}
 			else {
-				$screenshots = get_post_meta($postId, 'oxygen_vsb_components_screenshots', true);
+				$screenshots = oxy_get_post_meta($postId, 'oxygen_vsb_components_screenshots', true);
 			}
 
 			$loopIndex = 0;
@@ -2435,7 +2435,7 @@ Class OXY_VSB_Connection {
 						die();
 					}
 					else {
-						update_post_meta($postId, 'oxygen_vsb_components_screenshots', $screenshots);
+						oxy_update_post_meta($postId, 'oxygen_vsb_components_screenshots', $screenshots);
 						$debug_output = ob_get_clean();
 						$results = array('componentIndex' => $componentIndex+1, 'componentShot' => $result['url']);
 
@@ -2504,7 +2504,7 @@ Class OXY_VSB_Connection {
 					$post_type = get_post_type($postId);
 
 					if($post_type == 'ct_template') {
-						update_post_meta($postId, '_ct_connection_page_screenshot', $screenshots['page']);
+						oxy_update_post_meta($postId, '_ct_connection_page_screenshot', $screenshots['page']);
 					}
 				}
 			}
@@ -2518,8 +2518,8 @@ Class OXY_VSB_Connection {
 		echo "\n Final Screenshots \n";
 		
 
-		update_post_meta($postId, 'oxygen_vsb_components_screenshots', $screenshots);
-		update_post_meta($postId, '_ct_connection_screenshots_generated', date("Y-m-d H:i:s") );
+		oxy_update_post_meta($postId, 'oxygen_vsb_components_screenshots', $screenshots);
+		oxy_update_post_meta($postId, '_ct_connection_screenshots_generated', date("Y-m-d H:i:s") );
 		
 		$debug_output = ob_get_clean();
 		

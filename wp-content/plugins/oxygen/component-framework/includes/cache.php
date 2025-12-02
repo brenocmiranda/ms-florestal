@@ -104,7 +104,7 @@ function oxygen_vsb_cache_page_css($post_id, $content=false) {
 		$oxygen_preview_post_id = $post_id;
 
 		if ($content===false) {
-			$content = get_post_meta($post_id, 'ct_builder_json', true);
+			$content = oxy_get_post_meta($post_id, 'ct_builder_json', true);
 			$content = json_decode($content, true);
 		}
 		else {
@@ -112,7 +112,7 @@ function oxygen_vsb_cache_page_css($post_id, $content=false) {
 		}
 
 		if (!$content) {
-			$content = get_post_meta($post_id, 'ct_builder_shortcodes', true);
+			$content = oxy_get_post_meta($post_id, 'ct_builder_shortcodes', true);
 		}
 
 		if ($content===''||$content===null) {
@@ -340,9 +340,9 @@ function oxygen_vsb_load_cached_css_files() {
 				 && (!isset($_REQUEST['action']) || stripslashes($_REQUEST['action']) !== 'ct_render_widget') ) {
 				
 				// don't load xlink for posts that has no shortcodes or Page Settings saved
-				$shortcodes 	= get_post_meta( $post_id, "ct_builder_shortcodes", true);
-				$json 			= get_post_meta( $post_id, "ct_builder_json", true);
-				$page_settings 	= get_post_meta( $post_id, "ct_page_settings", true);
+				$shortcodes 	= oxy_get_post_meta( $post_id, "ct_builder_shortcodes", true);
+				$json 			= oxy_get_post_meta( $post_id, "ct_builder_json", true);
+				$page_settings 	= oxy_get_post_meta( $post_id, "ct_page_settings", true);
 
 				if ( $shortcodes || 
 					oxygen_json_has_elements($json) || 
@@ -407,11 +407,11 @@ function oxygen_vsb_generate_universal_css_by_ajax() {
 
     $result = oxygen_vsb_cache_universal_css();
     if ($result) {
-    	$message = __("Universal CSS cache generated successfully.","oxygen");
+    	$message = oxygen_translate("Universal CSS cache generated successfully.","oxygen");
     	update_option( 'flag_cache_repeaterid_fix', true);
     }
     else {
-    	$message = __("Universal CSS cache not generated.","oxygen");
+    	$message = oxygen_translate("Universal CSS cache not generated.","oxygen");
     }
     echo "<div>" . $message . "</div>";
 	wp_die();
@@ -567,9 +567,9 @@ function global_colors_cache_notice() {
 
 	?>
     <div class="notice notice-warning">
-        <p><?php _e( 'Oxygen\'s Global Colors have changed.', 'oxygen' );
+        <p><?php oxygen_translate_echo( 'Oxygen\'s Global Colors have changed.', 'oxygen' );
          		echo ' <a href="'.get_admin_url().'admin.php?page=oxygen_vsb_settings&tab=cache&start_cache_generation=true">';
-         		_e( 'Please click here to regenerate the CSS cache.', 'oxygen' ); 
+         		oxygen_translate_echo( 'Please click here to regenerate the CSS cache.', 'oxygen' ); 
          		echo "</a>";
          	?>
         </p>
@@ -605,9 +605,9 @@ function oxygen_breakpoints_cache_notice() {
 
 	?>
     <div class="notice notice-warning">
-        <p><?php _e( 'Oxygen\'s CSS breakpoints have changed.', 'oxygen' );
+        <p><?php oxygen_translate_echo( 'Oxygen\'s CSS breakpoints have changed.', 'oxygen' );
          		echo ' <a href="'.get_admin_url().'admin.php?page=oxygen_vsb_settings&tab=cache&start_cache_generation=true">';
-         		_e( 'Please click here to regenerate the CSS cache.', 'oxygen' ); 
+         		oxygen_translate_echo( 'Please click here to regenerate the CSS cache.', 'oxygen' ); 
          		echo "</a>";
          	?>
         </p>
@@ -647,9 +647,9 @@ function oxygen_vsb_update_2_2_notice() {
 
 	?>
     <div class="notice notice-warning">
-        <p><?php _e( 'Oxygen has been upgraded.', 'oxygen' );
+        <p><?php oxygen_translate_echo( 'Oxygen has been upgraded.', 'oxygen' );
          		echo ' <a href="'.get_admin_url().'admin.php?page=oxygen_vsb_settings&tab=cache&start_cache_generation=true">';
-         		_e( 'Please click here to regenerate the CSS cache.', 'oxygen' ); 
+         		oxygen_translate_echo( 'Please click here to regenerate the CSS cache.', 'oxygen' ); 
          		echo "</a>";
          	?>
         </p>

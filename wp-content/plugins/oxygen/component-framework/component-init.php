@@ -261,8 +261,8 @@ function oxygen_vsb_admin_notice() {
     if(get_transient('oxygen-vsb-enabled-shortcode-signing')) {
     	?>
 		<div class="updated notice is-dismissible">
-            <p><?php _e( 'Now that signature verification is enabled, you should re-sign all of your shortcodes.', 'component-theme' ); ?></p>
-            <p><a href="<?php echo add_query_arg('page', 'oxygen_vsb_sign_shortcodes', get_admin_url().'admin.php');?>"><?php _e( 're-sign all of your shortcodes', 'component-theme' ); ?></a></p>
+            <p><?php oxygen_translate_echo( 'Now that signature verification is enabled, you should re-sign all of your shortcodes.', 'component-theme' ); ?></p>
+            <p><a href="<?php echo add_query_arg('page', 'oxygen_vsb_sign_shortcodes', get_admin_url().'admin.php');?>"><?php oxygen_translate_echo( 're-sign all of your shortcodes', 'component-theme' ); ?></a></p>
         </div>
     	<?php
     	delete_transient( 'oxygen-vsb-enabled-shortcode-signing' );	
@@ -328,8 +328,8 @@ function oxygen_vsb_setup_wizard_content() {
 			<div class='oxygen-wizard-wrapper'>
 
 				<div class='oxygen-wizard-title'>
-					<h1><?php esc_html_e( 'Welcome to Oxygen.', 'component-theme' ); ?></h1>
-					<h1><?php esc_html_e( 'Please choose an installation type.', 'component-theme' ); ?></h1>
+					<h1><?php esc_htmloxygen_translate_echo( 'Welcome to Oxygen.', 'component-theme' ); ?></h1>
+					<h1><?php esc_htmloxygen_translate_echo( 'Please choose an installation type.', 'component-theme' ); ?></h1>
 				</div>
 
 				<div class='oxygen-wizard-content'>
@@ -337,9 +337,9 @@ function oxygen_vsb_setup_wizard_content() {
 					<div class='oxygen-wizard-install-types'>
 
 						<div class='oxygen-wizard-install-type'>
-							<h4><?php esc_html_e( 'Premade Website', 'component-theme' ); ?></h4>
-							<h2><?php esc_html_e( 'Recommended', 'component-theme' ); ?></h2>
-							<p><?php esc_html_e( 'Load a complete, premade website from our design library, then customize.', 'component-theme' ); ?></p>
+							<h4><?php esc_htmloxygen_translate_echo( 'Premade Website', 'component-theme' ); ?></h4>
+							<h2><?php esc_htmloxygen_translate_echo( 'Recommended', 'component-theme' ); ?></h2>
+							<p><?php esc_htmloxygen_translate_echo( 'Load a complete, premade website from our design library, then customize.', 'component-theme' ); ?></p>
 							<div class="oxygen-wizard-button-bar">
 							<?php
 								$browse_library = add_query_arg('page', 'ct_install_wiz', get_admin_url());
@@ -349,16 +349,16 @@ function oxygen_vsb_setup_wizard_content() {
 									$default_install = add_query_arg('default', 'atomic', $default_install);
 								}
 							?>
-								<a href="<?php echo $default_install;?>" class="oxygen-wizard-button"><?php esc_html_e( 'Default Install', 'component-theme' ); ?></a>
-								<a href="<?php echo $browse_library;?>" class="oxygen-wizard-button"><?php esc_html_e( 'Browse Library &raquo;', 'component-theme' ); ?></a>
+								<a href="<?php echo $default_install;?>" class="oxygen-wizard-button"><?php esc_htmloxygen_translate_echo( 'Default Install', 'component-theme' ); ?></a>
+								<a href="<?php echo $browse_library;?>" class="oxygen-wizard-button"><?php esc_htmloxygen_translate_echo( 'Browse Library &raquo;', 'component-theme' ); ?></a>
 							</div>
 						</div>
 
 						<div class='oxygen-wizard-install-type'>
-							<h4><?php esc_html_e( 'Blank Installation', 'component-theme' ); ?></h4>
-							<h2><?php esc_html_e( 'For Pro Designers', 'component-theme' ); ?></h2>
-							<p><?php esc_html_e( 'Start with a completely blank canvas and build something from scratch.', 'component-theme' ); ?></p>
-							<a href="<?php echo esc_url( admin_url() ); ?>" class="oxygen-wizard-button"><?php esc_html_e( 'Blank Install', 'component-theme' ); ?></a>
+							<h4><?php esc_htmloxygen_translate_echo( 'Blank Installation', 'component-theme' ); ?></h4>
+							<h2><?php esc_htmloxygen_translate_echo( 'For Pro Designers', 'component-theme' ); ?></h2>
+							<p><?php esc_htmloxygen_translate_echo( 'Start with a completely blank canvas and build something from scratch.', 'component-theme' ); ?></p>
+							<a href="<?php echo esc_url( admin_url() ); ?>" class="oxygen-wizard-button"><?php esc_htmloxygen_translate_echo( 'Blank Install', 'component-theme' ); ?></a>
 						</div>
 
 					</div>
@@ -541,7 +541,7 @@ function ct_is_show_builder() {
 		}
 		
 		if(!oxygen_vsb_current_user_can_access()) {
-			wp_die(__('You do not have sufficient permissions to edit the layout', 'oxygen'));
+			wp_die(oxygen_translate('You do not have sufficient permissions to edit the layout', 'oxygen'));
 		}
 
 		define("SHOW_CT_BUILDER", true);
@@ -575,7 +575,7 @@ add_action('init','ct_is_show_builder', 1 );
  */
 
 function ct_builder_wp_title( $title = array() ) {
- 	$title['title'] = __( 'Oxygen Visual Editor', 'component-theme' ).(isset($title['title'])?' - '.$title['title']:'');
+ 	$title['title'] = oxygen_translate( 'Oxygen Visual Editor', 'component-theme' ).(isset($title['title'])?' - '.$title['title']:'');
     return $title;
 }
 
@@ -635,7 +635,7 @@ function ct_oxygen_admin_menu() {
 		return;
 	}
 
-	if ( is_object( $post ) && isset( $post->ID ) && get_post_meta( $post->ID, 'oxygen_lock_post_edit_mode', true )=="true" && oxygen_vsb_get_user_edit_mode() == "edit_only" ) {
+	if ( is_object( $post ) && isset( $post->ID ) && oxy_get_post_meta( $post->ID, 'oxygen_lock_post_edit_mode', true )=="true" && oxygen_vsb_get_user_edit_mode() == "edit_only" ) {
         return;
     }
 
@@ -666,7 +666,7 @@ function ct_oxygen_admin_menu() {
 		if($post_id == false)
 			$post_id = $post->ID;
 
-		$ct_other_template = get_post_meta( $post_id, "ct_other_template", true );
+		$ct_other_template = oxy_get_post_meta( $post_id, "ct_other_template", true );
 		
 		$template = false;
 		
@@ -705,12 +705,12 @@ function ct_oxygen_admin_menu() {
 	
 	$contains_inner_content = false;
 	if($is_template) {
-		$json = get_post_meta( $template->ID, "ct_builder_json", true );
+		$json = oxy_get_post_meta( $template->ID, "ct_builder_json", true );
 		if ( $json ) {
 			$contains_inner_content = (strpos($json, '"name":"ct_inner_content"') !== false);
 		}
 		else {
-			$shortcodes = get_post_meta( $template->ID, "ct_builder_shortcodes", true );
+			$shortcodes = oxy_get_post_meta( $template->ID, "ct_builder_shortcodes", true );
 			
 			if($shortcodes) {
 				$contains_inner_content = (strpos($shortcodes, '[ct_inner_content') !== false);
@@ -722,33 +722,33 @@ function ct_oxygen_admin_menu() {
 		if(is_object($post)) {
 			
 			if ( isset( $post->ID ) ) {
-				$json = get_post_meta($post->ID, 'ct_builder_json', true);
-				$postShortcodes = get_post_meta($post->ID, 'ct_builder_shortcodes', true);
+				$json = oxy_get_post_meta($post->ID, 'ct_builder_json', true);
+				$postShortcodes = oxy_get_post_meta($post->ID, 'ct_builder_shortcodes', true);
 			}
 
 			if($contains_inner_content && ($postShortcodes || oxygen_json_has_elements($json) )) {
-				if (get_post_meta( $post->ID, 'oxygen_lock_post_edit_mode', true )=="true" && oxygen_vsb_get_user_edit_mode() == "edit_only") {
+				if (oxy_get_post_meta( $post->ID, 'oxygen_lock_post_edit_mode', true )=="true" && oxygen_vsb_get_user_edit_mode() == "edit_only") {
 					return;
 				}
-				$wp_admin_bar->add_menu( array( 'id' => 'oxygen_admin_bar_menu', 'title' => __( 'Oxygen', 'component-theme' ), 'href' => FALSE ) );
-				$wp_admin_bar->add_menu( array( 'id' => 'edit_post_template', 'parent' => 'oxygen_admin_bar_menu', 'title' => __( 'Edit with Oxygen', 'component-theme' ), 'href' => esc_url(ct_get_post_builder_link( $post->ID )).(($contains_inner_content)?'&ct_inner=true':'')) );
+				$wp_admin_bar->add_menu( array( 'id' => 'oxygen_admin_bar_menu', 'title' => oxygen_translate( 'Oxygen', 'component-theme' ), 'href' => FALSE ) );
+				$wp_admin_bar->add_menu( array( 'id' => 'edit_post_template', 'parent' => 'oxygen_admin_bar_menu', 'title' => oxygen_translate( 'Edit with Oxygen', 'component-theme' ), 'href' => esc_url(ct_get_post_builder_link( $post->ID )).(($contains_inner_content)?'&ct_inner=true':'')) );
 			}
 			else {
-				if (get_post_meta( $template->ID, 'oxygen_lock_post_edit_mode', true )=="true" && oxygen_vsb_get_user_edit_mode() == "edit_only") {
+				if (oxy_get_post_meta( $template->ID, 'oxygen_lock_post_edit_mode', true )=="true" && oxygen_vsb_get_user_edit_mode() == "edit_only") {
 					return;
 				}
-				$wp_admin_bar->add_menu( array( 'id' => 'oxygen_admin_bar_menu', 'title' => __( 'Oxygen', 'component-theme' ), 'href' => FALSE ) );
-				$wp_admin_bar->add_menu( array( 'id' => 'edit_template', 'parent' => 'oxygen_admin_bar_menu', 'title' => __( 'Edit '.$template->post_title.' Template', 'component-theme' ), 'href' => esc_url(get_edit_post_link( $template->ID )) ) );
+				$wp_admin_bar->add_menu( array( 'id' => 'oxygen_admin_bar_menu', 'title' => oxygen_translate( 'Oxygen', 'component-theme' ), 'href' => FALSE ) );
+				$wp_admin_bar->add_menu( array( 'id' => 'edit_template', 'parent' => 'oxygen_admin_bar_menu', 'title' => oxygen_translate( 'Edit '.$template->post_title.' Template', 'component-theme' ), 'href' => esc_url(get_edit_post_link( $template->ID )) ) );
 			}
 		}
 	}
 	else {
 		if(is_object($post)) {
-			if (get_post_meta( $post->ID, 'oxygen_lock_post_edit_mode', true )=="true" && oxygen_vsb_get_user_edit_mode() == "edit_only") {
+			if (oxy_get_post_meta( $post->ID, 'oxygen_lock_post_edit_mode', true )=="true" && oxygen_vsb_get_user_edit_mode() == "edit_only") {
 				return;
 			}
-			$wp_admin_bar->add_menu( array( 'id' => 'oxygen_admin_bar_menu', 'title' => __( 'Oxygen', 'component-theme' ), 'href' => FALSE ) );
-			$wp_admin_bar->add_menu( array( 'id' => 'edit_post_template', 'parent' => 'oxygen_admin_bar_menu', 'title' => __( 'Edit with Oxygen', 'component-theme' ), 'href' => esc_url(ct_get_post_builder_link( $post->ID ))) );
+			$wp_admin_bar->add_menu( array( 'id' => 'oxygen_admin_bar_menu', 'title' => oxygen_translate( 'Oxygen', 'component-theme' ), 'href' => FALSE ) );
+			$wp_admin_bar->add_menu( array( 'id' => 'edit_post_template', 'parent' => 'oxygen_admin_bar_menu', 'title' => oxygen_translate( 'Edit with Oxygen', 'component-theme' ), 'href' => esc_url(ct_get_post_builder_link( $post->ID ))) );
 		}
 	}
 
@@ -770,7 +770,7 @@ function ct_editing_template() {
     	define("OXY_TEMPLATE_EDIT", true);
 		
 		// below returns nothing since 2.0 Do we need to remove this?
-    	$template_type = get_post_meta( get_the_ID(), 'ct_template_type', true );
+    	$template_type = oxy_get_post_meta( get_the_ID(), 'ct_template_type', true );
 
     	if ( $template_type != "reusable_part" ) {
     		define("CT_TEMPLATE_EDIT", true);	
@@ -992,10 +992,10 @@ function ct_enqueue_scripts() {
 	    );
 
 	    $colorpicker_l10n = array(
-	        'clear' => __( 'Clear' ),
-	        'defaultString' => __( 'Default' ),
-	        'pick' => __( 'Select Color' ),
-	        'current' => __( 'Current Color' ),
+	        'clear' => oxygen_translate( 'Clear' ),
+	        'defaultString' => oxygen_translate( 'Default' ),
+	        'pick' => oxygen_translate( 'Select Color' ),
+	        'current' => oxygen_translate( 'Current Color' ),
 	    );
 	    wp_localize_script( 'ct-color-picker', 'wpColorPickerL10n', $colorpicker_l10n );
 
@@ -1223,7 +1223,8 @@ function oxy_get_ajax_vars() {
 
 	// shortcode fixer var
 	$options['fixShortcodes'] = isset( $_GET['fix_shortcodes'] ) && $_GET['fix_shortcodes'] == 'true' ? true : false;
-
+	$options['fixUnits'] = isset( $_GET['fix_units'] ) && $_GET['fix_units'] == 'true' ? true : false;
+	
 	return $options;
 }
 
@@ -1251,7 +1252,7 @@ function oxy_print_cached_css() {
 	if ( 
 		( !empty( $_GET['tve'] ) && $_GET['tve'] === 'true' ) 
 		||
-		( get_post_meta ( get_the_ID(), 'tcb2_ready', true ) && 
+		( oxy_get_post_meta ( get_the_ID(), 'tcb2_ready', true ) && 
 		  in_array('thrive-leads/thrive-leads.php', apply_filters('active_plugins', get_option('active_plugins') ) ) 
 		) 
 		) {
@@ -1962,8 +1963,8 @@ function ct_init_nice_names() {
 
 function ct_init_settings() { 
 
-	//update_post_meta( get_the_ID(), "ct_page_settings", array() );
-	$post_meta = get_post_meta( get_the_ID(), "ct_page_settings", true );
+	//oxy_update_post_meta( get_the_ID(), "ct_page_settings", array() );
+	$post_meta = oxy_get_post_meta( get_the_ID(), "ct_page_settings", true );
 	if (!is_array($post_meta)) {
 		$post_meta = array();
 	}
@@ -2186,7 +2187,7 @@ function ct_template_shortcodes() {
 		{
 			$template 	= ct_get_archives_template();
 
-			$shortcodes = $template?get_post_meta( $template->ID, "ct_builder_shortcodes", true ):false;
+			$shortcodes = $template?oxy_get_post_meta( $template->ID, "ct_builder_shortcodes", true ):false;
 
 			if($template) {
 				$is_template = true;
@@ -2202,7 +2203,7 @@ function ct_template_shortcodes() {
 
 		$oxygen_vsb_css_files_to_load[] = $post_id;
 
-		$ct_other_template = get_post_meta( $post_id, "ct_other_template", true );
+		$ct_other_template = oxy_get_post_meta( $post_id, "ct_other_template", true );
 		
 		$template = false;
 		
@@ -2230,9 +2231,9 @@ function ct_template_shortcodes() {
 			if(isset($_REQUEST['oxy_preview_revision']) && is_numeric($_REQUEST['oxy_preview_revision'])) {
 				$shortcodes = Oxygen_Revisions::get_post_meta_db( null, null, true, null, OBJECT, $_REQUEST['oxy_preview_revision'] )->meta_value;
 			} else {
-				$shortcodes = get_post_meta( $post_id, "ct_builder_shortcodes", true );
+				$shortcodes = oxy_get_post_meta( $post_id, "ct_builder_shortcodes", true );
             }
-			if( class_exists('Oxygen_Gutenberg') && get_post_meta( $post_id, 'ct_oxygenberg_full_page_block', true ) == '1' ) {
+			if( class_exists('Oxygen_Gutenberg') && oxy_get_post_meta( $post_id, 'ct_oxygenberg_full_page_block', true ) == '1' ) {
 				$post = get_post($post_id);
 				$shortcodes = do_blocks( $post->post_content );
 			}
@@ -2241,7 +2242,7 @@ function ct_template_shortcodes() {
 	} elseif(!$template) {
 
 		$template 	= ct_get_archives_template();
-		$shortcodes = $template?get_post_meta( $template->ID, "ct_builder_shortcodes", true ):false;
+		$shortcodes = $template?oxy_get_post_meta( $template->ID, "ct_builder_shortcodes", true ):false;
 
 		if($template) {
 			$is_template = true;
@@ -2279,7 +2280,7 @@ function ct_template_shortcodes() {
 	// in case it is a request to generate a screenshot for a single component, then the rendered page should not be wrapped with the outer template
 	if(!$is_template && isset($_REQUEST['render_component_screenshot']) && stripslashes($_REQUEST['render_component_screenshot']) == 'true' && isset($_REQUEST['selector'])) {
 		
-		$shortcodes = get_post_meta( $post_id, "ct_builder_shortcodes", true );
+		$shortcodes = oxy_get_post_meta( $post_id, "ct_builder_shortcodes", true );
 		
 	}
 
@@ -2306,11 +2307,11 @@ function oxygen_get_combined_shortcodes($template, $retainInnerContent = false) 
 			$shortcodes = "";
 		}
 	} else {
-		$shortcodes = get_post_meta( $template, "ct_builder_shortcodes", true );
+		$shortcodes = oxy_get_post_meta( $template, "ct_builder_shortcodes", true );
 	}
 	$shortcodes = parse_shortcodes($shortcodes, false);
 	// does this template inherits another template
-	$parent = get_post_meta( $template, "ct_parent_template", true);
+	$parent = oxy_get_post_meta( $template, "ct_parent_template", true);
 	
 	if($parent) {
 
@@ -2383,7 +2384,7 @@ function ct_template_json() {
 		}
 		else {
 			$template = ct_get_archives_template();
-			$json = $template ? get_post_meta( $template->ID, "ct_builder_json", true ) : false;
+			$json = $template ? oxy_get_post_meta( $template->ID, "ct_builder_json", true ) : false;
 			if ($template) {
 				$is_template = true;
 			}
@@ -2398,7 +2399,7 @@ function ct_template_json() {
 		}
 
 		$oxygen_vsb_css_files_to_load[] = $post_id;
-		$ct_other_template = get_post_meta( $post_id, "ct_other_template", true );
+		$ct_other_template = oxy_get_post_meta( $post_id, "ct_other_template", true );
 		$template = false;
 		
 		if(!empty($ct_other_template) && $ct_other_template > 0) { // no template is specified
@@ -2426,9 +2427,9 @@ function ct_template_json() {
 				$json = Oxygen_Revisions::get_post_meta_db( null, null, true, null, OBJECT, $_REQUEST['oxy_preview_revision'] )->meta_value;
 				$json = oxygen_safe_convert_old_shortcodes_to_json($json);
 			} else {
-				$json = get_post_meta( $post_id, "ct_builder_json", true );
+				$json = oxy_get_post_meta( $post_id, "ct_builder_json", true );
             }
-			if( class_exists('Oxygen_Gutenberg') && get_post_meta( $post_id, 'ct_oxygenberg_full_page_block', true ) == '1' ) {
+			if( class_exists('Oxygen_Gutenberg') && oxy_get_post_meta( $post_id, 'ct_oxygenberg_full_page_block', true ) == '1' ) {
 				$post = get_post($post_id);
 				$json = do_blocks( $post->post_content );
 			}
@@ -2437,7 +2438,7 @@ function ct_template_json() {
 	} elseif(!$template) {
 
 		$template 	= ct_get_archives_template();
-		$json = $template ? get_post_meta( $template->ID, "ct_builder_json", true ) : false;
+		$json = $template ? oxy_get_post_meta( $template->ID, "ct_builder_json", true ) : false;
 
 		if($template) {
 			$is_template = true;
@@ -2469,7 +2470,7 @@ function ct_template_json() {
 
 	// in case it is a request to generate a screenshot for a single component, then the rendered page should not be wrapped with the outer template
 	if( !$is_template && isset($_REQUEST['render_component_screenshot']) && stripslashes($_REQUEST['render_component_screenshot']) == 'true' && isset($_REQUEST['selector'])) {
-		$json = get_post_meta( $post_id, "ct_builder_json", true );
+		$json = oxy_get_post_meta( $post_id, "ct_builder_json", true );
 	}
 
 	if ( $json ) {
@@ -2491,7 +2492,7 @@ function oxygen_get_combined_tree($template_id, $retainInnerContent = false) {
 			$json = array();
 		}
 	} else {
-		$json = get_post_meta( $template_id, "ct_builder_json", true );
+		$json = oxy_get_post_meta( $template_id, "ct_builder_json", true );
 	}
 
 	if ($json) {
@@ -2500,7 +2501,7 @@ function oxygen_get_combined_tree($template_id, $retainInnerContent = false) {
 	}
 	else {
 		// no JSON yet, create it from shortcodes on the fly
-		$shortcodes = get_post_meta( $template_id, "ct_builder_shortcodes", true );
+		$shortcodes = oxy_get_post_meta( $template_id, "ct_builder_shortcodes", true );
 		$tree = parse_shortcodes($shortcodes, false, false);
 		$tree['content'] = ct_base64_encode_decode_tree($tree['content'], true);
 		$components_tree = array(
@@ -2509,11 +2510,11 @@ function oxygen_get_combined_tree($template_id, $retainInnerContent = false) {
 			'depth' => 0,
 			'children' => $tree['content']
 		);
-		update_post_meta($template_id, 'ct_builder_json', addslashes(json_encode($components_tree, JSON_UNESCAPED_UNICODE)));
+		oxy_update_post_meta($template_id, 'ct_builder_json', addslashes(json_encode($components_tree, JSON_UNESCAPED_UNICODE)));
 	}
 
 	// does this template inherits another template
-	$parent_id = get_post_meta( $template_id, "ct_parent_template", true);
+	$parent_id = oxy_get_post_meta( $template_id, "ct_parent_template", true);
 	
 	if ($parent_id) {
 
@@ -3042,12 +3043,16 @@ function ct_generate_class_states_css( $class, $state, $options, $is_media = fal
                         $name == 'container-padding-bottom'||
                         $name == 'container-padding-left'||
                         $name == 'container-padding-right') {
-                        $unit = isset( $options[$name.'-unit'] ) ? $options[$name.'-unit'] : $global_settings['sections'][$name.'-unit'];
-						if ( $is_media ) {
+                        $unit = isset( $options[$name.'-unit'] ) ? $options[$name.'-unit'] : false;
+						$global_unit = $global_settings['sections'][$name.'-unit'];
+						if ( $is_media && !$unit ) {
 							$media_unit = oxy_get_closest_breakpoint_value($name.'-unit', $is_media, $state, $all_styles);
 							if ($media_unit) {
 								$unit = $media_unit;
 							}
+						}
+						if ( !$unit ) {
+							$unit = $global_unit;
 						}
                         if ( $options[$name] ) {
                             $options[$name] .= $unit;
@@ -4071,9 +4076,9 @@ function ct_chrome_modal() {
 	if ( defined("SHOW_CT_BUILDER") )  {
 		$dismissed = get_option("ct_chrome_modal", false );
 
-		$warningMessage = __("<h2><span class='ct-icon-warning'></span> Warning: we recommend Google Chrome when designing pages</h2><p>The designs you create using Oxygen will work properly in all modern browsers including but not limited to Chrome, Firefox, Safari, and Internet Explorer/Edge.</p><p>But for the best, most stable experience when using Oxygen to design pages, we recommend using Google Chrome.</p><p>We've done most of our testing with Chrome and expect that you will encounter minor bugs in the builder when using Firefox or Safari. Please report those to us by e-mailing at support@oxygenapp.com.</p><p>We have no intention of making the builder work well in Internet Explorer.</p><p>Again, this message only applies to the builder itself. The pages you create with Oxygen will render correctly in all modern browsers.</p><p>Best Regards,<br />The Oxygen Team</p>", 'component-theme' );
+		$warningMessage = oxygen_translate("<h2><span class='ct-icon-warning'></span> Warning: we recommend Google Chrome when designing pages</h2><p>The designs you create using Oxygen will work properly in all modern browsers including but not limited to Chrome, Firefox, Safari, and Internet Explorer/Edge.</p><p>But for the best, most stable experience when using Oxygen to design pages, we recommend using Google Chrome.</p><p>We've done most of our testing with Chrome and expect that you will encounter minor bugs in the builder when using Firefox or Safari. Please report those to us by e-mailing at support@oxygenapp.com.</p><p>We have no intention of making the builder work well in Internet Explorer.</p><p>Again, this message only applies to the builder itself. The pages you create with Oxygen will render correctly in all modern browsers.</p><p>Best Regards,<br />The Oxygen Team</p>", 'component-theme' );
 
-		$hideMessage = __("hide this notice", 'component-theme' );
+		$hideMessage = oxygen_translate("hide this notice", 'component-theme' );
 
 		if(!$dismissed) {
 
@@ -4216,8 +4221,8 @@ function ct_determine_render_template( $template ) {
 		if(isset($_REQUEST['oxy_preview_revision']) && is_numeric($_REQUEST['oxy_preview_revision'])) {
 			$custom_view = Oxygen_Revisions::get_post_meta_db( $post_id, null, true, null, OBJECT, $_REQUEST['oxy_preview_revision'] )->meta_value;
 		} else {
-			$shortcodes = get_post_meta( $post_id, "ct_builder_shortcodes", true );
-			$json = get_post_meta( $post_id, "ct_builder_json", true );
+			$shortcodes = oxy_get_post_meta( $post_id, "ct_builder_shortcodes", true );
+			$json = oxy_get_post_meta( $post_id, "ct_builder_json", true );
 			$custom_view = oxygen_json_has_elements($json) || $shortcodes;
 		}
 	}
@@ -4447,7 +4452,7 @@ function add_web_font($shortcodes=false) {
 				$inner_contnet_json = Oxygen_Revisions::get_post_meta_db( get_the_ID(), null, true, null, OBJECT, $_REQUEST['oxy_preview_revision'] )->meta_value;
 				$inner_contnet_json = oxygen_safe_convert_old_shortcodes_to_json($inner_contnet_json);
 			} else {
-				$inner_contnet_json = get_post_meta( get_the_ID(), "ct_builder_json", true );
+				$inner_contnet_json = oxy_get_post_meta( get_the_ID(), "ct_builder_json", true );
 			}
 			if ( oxygen_json_has_elements( $inner_contnet_json) ) {
 				$json .= $inner_contnet_json;
@@ -4640,7 +4645,7 @@ function oxy_replace_inner_content($match) {
 		if(isset($_REQUEST['oxy_preview_revision']) && is_numeric($_REQUEST['oxy_preview_revision'])) {
 			$shortcodes = Oxygen_Revisions::get_post_meta_db( get_the_ID(), null, true, null, OBJECT, $_REQUEST['oxy_preview_revision'] )->meta_value;
 		} else {
-			$shortcodes = get_post_meta( get_the_ID(), "ct_builder_shortcodes", true );
+			$shortcodes = oxy_get_post_meta( get_the_ID(), "ct_builder_shortcodes", true );
 		}
 		return $shortcodes;
 	}
@@ -4790,12 +4795,14 @@ function ct_get_global_settings($return_defaults = false) {
 	// get saved settings
 	//update_option("ct_global_settings",array());
 	$settings = get_option("ct_global_settings",array());
+
+	$display_font_name = get_option("oxygen_default_display_font", "Source Sans Pro"); // default to old 'Source Sans Pro' for backward compat
 	
 	// defaults
 	$defaults = array ( 
 				"fonts" => array(
 						'Text' 		=> 'Open Sans',
-						'Display' 	=> 'Source Sans Pro' 
+						'Display' 	=> $display_font_name, 
 					),
 				"indicateParents" => 'true',
 				"classSuggestionsLimit" => '5',
@@ -4929,7 +4936,7 @@ function oxy_get_global_colors($return_defaults = false) {
 					// the only default Color Set
 					array(
 						"id" => 0,
-						"name" => __("Global Colors","oxygen")
+						"name" => oxygen_translate("Global Colors","oxygen")
 					),
 				)
 			);
@@ -4977,7 +4984,7 @@ function ct_get_page_settings($only_template=false) {
 					)
 			);
 
-	$page_settings = get_post_meta( $id, "ct_page_settings", true );
+	$page_settings = oxy_get_post_meta( $id, "ct_page_settings", true );
 	if ( !is_array($page_settings) ) {
 		$page_settings = array();
 	}
@@ -4988,7 +4995,7 @@ function ct_get_page_settings($only_template=false) {
 
 	// fix to get parent template id in builder
 	if (defined("SHOW_CT_BUILDER") && get_post_type()=="ct_template") {
-		$ct_template_id = get_post_meta( $id, "ct_parent_template", true);
+		$ct_template_id = oxy_get_post_meta( $id, "ct_parent_template", true);
 	}
 
 	if (isset($ct_template_id)) {
@@ -4997,7 +5004,7 @@ function ct_get_page_settings($only_template=false) {
 		$parent_settings = $defaults;
 		global $ct_parent_template_id;
 		if (isset($ct_parent_template_id)) {
-			$parent_settings = get_post_meta( $ct_parent_template_id, "ct_page_settings", true );
+			$parent_settings = oxy_get_post_meta( $ct_parent_template_id, "ct_page_settings", true );
 			if (!is_array($parent_settings)) {
 				$parent_settings = $defaults;
 			}
@@ -5010,7 +5017,7 @@ function ct_get_page_settings($only_template=false) {
 			$parent_settings = $defaults;
 		}
 
-		$template_settings = get_post_meta( $ct_template_id, "ct_page_settings", true );
+		$template_settings = oxy_get_post_meta( $ct_template_id, "ct_page_settings", true );
 		if (!is_array($template_settings)) {
 			$template_settings = array();
 		}
@@ -5622,7 +5629,7 @@ function set_ct_offsetDepths_source($parent_id, $shortcodes) {
 
 function ct_disable_theme_load( $stylesheet_dir ) {
 	// disable theme entirely for now
-	return "fake";
+	return (dirname(__FILE__));
 }
 
 // Need to remove for both parent and child themes
@@ -5647,6 +5654,26 @@ function ct_oxygen_template_name($template) {
 	return "oxygen-is-not-a-theme";
 }
 add_filter("template", "ct_oxygen_template_name");
+
+
+/**
+ * Force wp_is_block_theme() to be false
+ *
+ * @since 4.9.3
+ * @author Ilya K.
+ */
+
+ function oxygen_vsb_force_non_block_theme_path($path, $file)
+ {
+	 $file = ltrim((string) $file, '/');
+	 if ('templates/index.html' === $file || 'block-templates/index.html' === $file) {
+		 return '';
+	 }
+	 return $path;
+ }
+ if (get_option('oxygen_vsb_force_non_block_theme', true)) {
+	 add_filter('theme_file_path', 'oxygen_vsb_force_non_block_theme_path', 10, 2);
+ }
 
 
 /**
@@ -6173,7 +6200,7 @@ function ct_post_meta_on_new_reusable( $post_id ) {
     	$is_reusable = isset($_REQUEST['is_reusable'])?true: false;
 
     	if($is_reusable) {
-    		add_post_meta( $post_id, 'ct_template_type', 'reusable_part' );
+    		add_post_meta( $post_id, '_ct_template_type', 'reusable_part' );
     	}
     
     }
@@ -6543,4 +6570,26 @@ function oxy_hot_reload_script() {
 		}, 1000);
 	</script>
 	<?php
+}
+
+function oxy_get_meta_prefix( $key ) {
+	
+	if( substr($key, 0, 3 ) === 'ct_' || 
+		substr($key, 0, 4 ) === 'oxy_' ||
+		substr($key, 0, 7 ) === 'oxygen_'
+	) {
+		$key = "_".$key;
+	}
+
+	return $key;
+}
+
+function oxy_get_post_meta( $post_id, $key = "", $single = false ) {
+	$key = oxy_get_meta_prefix($key);
+	return get_post_meta( $post_id, $key, $single );
+}
+
+function oxy_update_post_meta( $post_id, $key, $value) {
+	$key = oxy_get_meta_prefix($key);
+	return update_post_meta( $post_id, $key, $value );
 }

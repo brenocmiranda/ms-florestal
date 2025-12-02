@@ -6,7 +6,7 @@
  * @since 2.4
  * @author Ilya K.
  */
-
+#[AllowDynamicProperties]
 Class OxygenElementControlsSection {
 
 	public $id;

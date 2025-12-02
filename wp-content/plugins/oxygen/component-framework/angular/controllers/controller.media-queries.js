@@ -648,12 +648,14 @@ CTFrontendBuilder.controller("ControllerMediaQueries", function($scope, $parentS
         if (options.id && options.state) {
 
 			if (media=="default") {
-				if ( $scope.component.options[options.id][options.state] &&
+				if ( $scope.component.options[options.id] &&
+					 $scope.component.options[options.id][options.state] &&
 					 $scope.component.options[options.id][options.state][optionName]) {
 					return $scope.component.options[options.id][options.state][optionName];
 				}
 			}
-            else if ( $scope.component.options[options.id]['media'] &&
+            else if ( $scope.component.options[options.id] &&
+				 $scope.component.options[options.id]['media'] &&
                  $scope.component.options[options.id]['media'][media] &&
                  $scope.component.options[options.id]['media'][media][options.state] &&
                  $scope.component.options[options.id]['media'][media][options.state][optionName]) {

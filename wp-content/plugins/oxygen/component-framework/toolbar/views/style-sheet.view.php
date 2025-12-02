@@ -1,4 +1,5 @@
 <div class="oxygen-sidebar-code-editor-wrap oxygen-sidebar-stylesheet-editor-wrap">
+  <div class="oxygen-code-error-container"></div>
   <script>
 	var timeoutID;
 	if (typeof($scope)!=="undefined") {
@@ -31,15 +32,14 @@
 	}
 	</script>
   <div id="oxy-style-sheets-cm6" class="oxy-code-cm6"></div>
-  <div class="oxygen-code-error-container"></div>
 </div>
 
 <div class="oxygen-control-row oxygen-control-row-bottom-bar oxygen-control-row-bottom-bar-code-editor">
   <?php global $oxygen_toolbar; 
     $oxygen_toolbar->codemirror_theme_chooser(); ?>  
   <a href="#" class="oxygen-code-editor-expand"
-    data-collapse="<?php _e("Collapse Editor", "oxygen"); ?>" data-expand="<?php _e("Expand Editor", "oxygen"); ?>"
+    data-collapse="<?php oxygen_translate_echo("Collapse Editor", "oxygen"); ?>" data-expand="<?php oxygen_translate_echo("Expand Editor", "oxygen"); ?>"
     ng-click="toggleSidebar()">
-    <?php _e("Expand Editor", "oxygen"); ?>
+    <?php oxygen_translate_echo("Expand Editor", "oxygen"); ?>
   </a>
 </div>

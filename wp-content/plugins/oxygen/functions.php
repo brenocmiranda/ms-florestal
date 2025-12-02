@@ -3,15 +3,15 @@
 /*
 Plugin Name: Oxygen
 Author: Soflyy
-Author URI: https://oxygenbuilder.com
+Author URI: https://classic.oxygenbuilder.com
 Description: If you can do it with WordPress, you can design it with Oxygen.
-Version: 4.8.1
+Version: 4.9.3
 Text Domain: oxygen
 Update URI: oxygenbuilder.com
+Requires PHP: 7.4
 */
-update_option( 'oxygen_vsb_is_agency_bundle', true );
-update_option( 'oxygen_vsb_is_composite_elements_agency_bundle', true );
-define("CT_VERSION", 	"4.8.1");
+
+define("CT_VERSION", 	"4.9.3");
 define("CT_FW_PATH", 	plugin_dir_path( __FILE__ )  . 	"component-framework" );
 define("CT_FW_URI", 	plugin_dir_url( __FILE__ )  . 	"component-framework" );
 define("CT_PLUGIN_MAIN_FILE", __FILE__ );	
@@ -29,7 +29,7 @@ $ct_ignore_post_types = array(
 
 global $ct_component_categories;
 $ct_component_categories = array(
-	'Headers',
+    'Headers',
     'Heros & Titles',
     'Content',
     'Showcase',
@@ -326,5 +326,30 @@ if($isADesignSet) {
     
     $ct_source_sites = array_merge($selfSites, $ct_source_sites);
 }
+
+if (!function_exists('oxygen_translate')) {
+	function oxygen_translate($string, $textdomain = "") {
+		return $string;
+	}
+}
+
+if (!function_exists('oxygen_translate_echo')) {
+	function oxygen_translate_echo($string, $textdomain = "") {
+		echo($string);
+	}
+}
+
+if (!function_exists('esc_attroxygen_translate_echo')) {
+	function esc_attroxygen_translate_echo($string, $textdomain = "") {
+		echo esc_attr($string);
+	}
+}
+
+if (!function_exists('esc_htmloxygen_translate_echo')) {
+	function esc_htmloxygen_translate_echo($string, $textdomain = "") {
+		echo esc_html($string);
+	}
+}
+
 
 require_once("component-framework/component-init.php");
